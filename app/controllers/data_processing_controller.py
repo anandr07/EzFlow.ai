@@ -11,6 +11,7 @@ def index():
 def upload_data():
     file = request.files['file']
     # Add logic to save the file or parse data as needed
+    # To Be Updated
 
     # Render the same HTML page (for now)
     return render_template('index.html')
@@ -18,7 +19,7 @@ def upload_data():
 @app.route('/process_data', methods=['POST'])
 def process_data_route():
     imputation_type = request.json.get('imputation_type', 'mean')
-    # Assuming process_data is a function defined in data_processing_service.py
+    # process_data is a function defined in data_processing_service.py
     from app.services.data_processing_service import process_data
     result = process_data(imputation_type)
     return jsonify(result)
