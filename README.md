@@ -49,6 +49,52 @@ Welcome to EzFlow.ai , your go-to platform for effortlessly turning raw tabular 
 - Communication: Axios for fetching results from the backend.
 - Visualization: D3.js or Chart.js for presenting model comparisons.
 
+# How it Works
+
+## Frontend:
+
+1. Build UI components for data upload, ML options selection, and result display.
+2. Use a frontend framework to manage state and handle user interactions.
+
+**Tools:**
+- Framework: [React](https://reactjs.org/) for building an interactive UI.
+- State Management: Use state management tools provided by the chosen framework.
+
+## Backend:
+
+1. Set up a server using a web framework.
+2. Implement API endpoints for data upload, processing, and model training.
+3. Write data processing logic and integrate with machine learning libraries.
+4. Store/retrieve data in/from the database.
+
+**Tools:**
+- Framework: Choose a web framework such as [Flask](https://flask.palletsprojects.com/) or [Express](https://expressjs.com/).
+- API: Implement RESTful API endpoints.
+- Database: Utilize a database system like [PostgreSQL](https://www.postgresql.org/) for data storage.
+
+## Database:
+
+1. Create a database schema based on processed data requirements.
+2. Implement CRUD operations for data storage and retrieval.
+
+**Tools:**
+- Database System: [PostgreSQL](https://www.postgresql.org/) or any suitable relational database.
+
+## Virtual Machine:
+
+1. Provision a virtual machine on a cloud platform.
+2. Containerize the machine learning environment using Docker.
+3. Develop scripts for loading data, preprocessing, training models, and storing results.
+
+**Tools:**
+- Cloud Platform: [AWS](https://aws.amazon.com/), [Google Cloud](https://cloud.google.com/), or [Azure](https://azure.microsoft.com/).
+- Containerization: Use [Docker](https://www.docker.com/) for creating isolated environments.
+
+---
+
+This section outlines the workflow from building the frontend UI to setting up a robust backend, creating a structured database, and leveraging a virtual machine for machine learning processes.
+
+
 ---
 
 This comprehensive process flow involves a user-friendly frontend, a robust backend utilizing Flask and Pandas for data processing, a PostgreSQL database for efficient data storage, a scalable AWS EC2 virtual machine for model training, and popular machine learning libraries for building and training models.
