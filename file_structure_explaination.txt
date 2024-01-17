@@ -1,0 +1,32 @@
+
+run.py: This is the main entry point for our Flask application. It initializes and runs the Flask app.
+
+app/__init__.py: This file initializes the Flask app and sets up the database (using SQLAlchemy). It also defines the create_app function that creates and configures the Flask app instance.
+
+app/controllers/__init__.py: Initializes the controllers package. This file will include any setup needed for the controllers.
+
+app/controllers/data_processing_controller.py: Defines routes and logic related to data processing. Handles uploading data and processing it. This file is responsible for rendering the HTML templates.
+
+app/controllers/machine_learning_controller.py: This file contains routes and logic related to machine learning aspects of our application. It's not updated.
+
+app/controllers/data_visualization_controller.py: This file contains routes and logic related to data visualization.
+
+app/models/database_models.py: Defines the database models, including RawData and ProcessedData using SQLAlchemy.
+
+app/services/__init__.py: Initializes the services package. Include any setup needed for the services.
+
+app/services/data_processing_service.py: Contains the business logic for processing data. This includes functions for data cleaning, transformation, and other processing tasks.
+
+app/services/machine_learning_service.py: This file contains services related to machine learning. 
+
+app/services/data_visualization_service.py: This file contains services related to data visualization. 
+
+config/config.py: Configuration file for our Flask app. It includes settings related to the app, database, or other configurations.
+
+templates/index.html: HTML template for the main page of our application. It includes a form for uploading data. - TBU
+
+static/styles.css: CSS file for styling our HTML templates. -TBU
+
+tests/unit/test_data_processing.py: Unit tests for the data processing functionality. - Currently empty - TBU
+
+instance: This directory contains instance-specific configuration files. - This is not a clear concept yet. Have to decide to keep or remove this. Decide to keep to remove this. 
