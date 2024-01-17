@@ -97,3 +97,45 @@ This comprehensive process flow involves a user-friendly frontend, a robust back
 ---
 
 This section outlines the workflow from building the frontend UI to setting up a robust backend, creating a structured database, and leveraging a virtual machine for machine learning processes.
+
+## Code Structure:
+project-root/
+|-- frontend/
+|   |-- src/
+|   |   |-- components/
+|   |   |   |-- DataUpload.js
+|   |   |   |-- MLOptions.js
+|   |   |   |-- ResultDisplay.js
+|   |   |-- state/
+|   |   |   |-- dataState.js
+|   |   |-- App.js
+|   |   |-- index.js
+|-- backend/
+|   |-- app/
+|   |   |-- routes/
+|   |   |   |-- upload.js
+|   |   |   |-- process.js
+|   |   |   |-- train.js
+|   |   |-- controllers/
+|   |   |   |-- dataController.js
+|   |   |   |-- modelController.js
+|   |   |-- models/
+|   |   |   |-- dataModel.js
+|   |   |-- database/
+|   |   |   |-- dbConfig.js
+|   |   |   |-- migrations/
+|   |   |   |   |-- ...
+|-- database/
+|   |-- migrations/
+|   |   |-- ...
+|-- virtual_machine/
+|   |-- docker/
+|   |   |-- Dockerfile_data_loader
+|   |   |-- Dockerfile_preprocessor
+|   |   |-- Dockerfile_model_trainer
+|   |-- scripts/
+|   |   |-- load_data.py
+|   |   |-- preprocess_data.py
+|   |   |-- train_model.py
+|-- README.md
+
