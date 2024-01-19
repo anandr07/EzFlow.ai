@@ -1,30 +1,43 @@
 #%%
-# data_processing_controller.py
-from flask import render_template, request, jsonify
-from app import db, app  # Import app instance
+# app/controllers/data_processing_controller.py
+
+''' Make sure to handle exceptions, and scale the code accordingly.
+If a new change is made make sure it doesn't affect the earlier codes.
+'''
+
+# Imports
+import pandas as pd
+from flask import render_template, request, redirect, url_for
+from app import app
+from app.services.data_processing_service import process_uploaded_file
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', data_head=None)  # Pass data_head as None initially
 
-@app.route('/upload_data', methods=['POST'])
-def upload_data():
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return redirect(url_for('index'))
+
     file = request.files['file']
-    # Add logic to save the file or parse data as needed
-    # To Be Updated
 
-    # Render the same HTML page (for now)
-    return render_template('index.html')
+    if file.filename == '':
+        return redirect(url_for('index'))
 
-@app.route('/process_data', methods=['POST'])
-def process_data_route():
-    imputation_type = request.json.get('imputation_type', 'mean')
-    # process_data is a function defined in data_processing_service.py
-    from app.services.data_processing_service import process_data
-    result = process_data(imputation_type)
-    return jsonify(result)
+    if file:
+        data_head = process_uploaded_file(file)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+        if isinstance(data_head, pd.DataFrame):
+            return render_template('index.html', data_head=data_head.head().to_html())
+        else:
+            return render_template('index.html', error_message="Invalid file content. Please upload a valid CSV file.")
+
+    return redirect(url_for('index'))
+
+#*****************************************************************DONOT CHANGE THE ABOVE***************************************************************************************** # 
+
+
+#******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
 
 

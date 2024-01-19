@@ -1,36 +1,31 @@
 #%%
-import pandas as pd
-from app import db  # Add the import for db
-from app.models.database_models import RawData, ProcessedData
+# app/services/data_processing_service.py
 
-def process_data(imputation_type='mean', encoding_type='label'):  # Add encoding_type as a parameter
-    raw_data = pd.read_sql(db.session.query(RawData).statement, db.session.bind)
-    
-    # Handle missing values based on user choice (Just a sample To be Modified Later)
-    if imputation_type == 'mean':
-        processed_data = raw_data.fillna(raw_data.mean())
-    elif imputation_type == 'median':
-        processed_data = raw_data.fillna(raw_data.median())
-    elif imputation_type == 'mode':
-        processed_data = raw_data.fillna(raw_data.mode().iloc[0])
-    else:
-        processed_data = raw_data
-    
-    # Label columns as Continuous or Categorical (Just a sample To be Modified Later)
-    for column in processed_data.columns:
-        if pd.api.types.is_numeric_dtype(processed_data[column]):
-            processed_data[f"{column}_label"] = "Continuous"
-        else:
-            processed_data[f"{column}_label"] = "Categorical"
-            
-            # Encode categorical data based on user choice (Just a sample To be Modified Later)
-            if encoding_type == 'label':
-                processed_data[column] = processed_data[column].astype('category').cat.codes
-            elif encoding_type == 'one_hot':
-                processed_data = pd.get_dummies(processed_data, columns=[column], prefix=[column])
-    
-    # Add logic to save labeled and encoded data in ProcessedData table (Just a sample To be Modified Later)
-    processed_data.to_sql('processed_data', con=db.engine, index=False, if_exists='replace')
-    return {'message': 'Data processed successfully!'}
+''' Make sure to handle exceptions, and scale the code accordingly.
+If a new change is made make sure it doesn't affect the earlier codes.
+'''
+
+import pandas as pd
+from flask import request
+
+def process_uploaded_file(file):
+    try:
+        # Read CSV file into a DataFrame
+        df = pd.read_csv(file)
+
+        # Get an option from the user if they want to display x number of rows
+        x_rows = 10  # Set a default value
+        if 'x_rows' in request.form:
+            x_rows = int(request.form['x_rows'])
+
+        # Display head of the dataset
+        data_head = df.head(x_rows)
+
+        return data_head  # Return the DataFrame head
+    except Exception as e:
+        # Handle exceptions, log or print an error message
+        print(f"Error processing file: {e}")
+        return None
+
 
 ## DONOT CHANGE THIS FILE 

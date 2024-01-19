@@ -1,0 +1,80 @@
+Folder PATH listing for volume OS
+Volume serial number is F020-53CC
+C:.
+¦   file_structure_explaination.txt
+¦   README.md
+¦   run.py
+¦   tree.txt
+¦   tree_new.txt
+¦   
++---app
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---controllers
+¦   ¦   ¦   data_processing_controller.py
+¦   ¦   ¦   data_visualization_controller.py
+¦   ¦   ¦   machine_learning_controller.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           data_processing_controller.cpython-312.pyc
+¦   ¦           data_processing_controller.cpython-38.pyc
+¦   ¦           data_visualization_controller.cpython-312.pyc
+¦   ¦           data_visualization_controller.cpython-38.pyc
+¦   ¦           machine_learning_controller.cpython-312.pyc
+¦   ¦           machine_learning_controller.cpython-38.pyc
+¦   ¦           __init__.cpython-312.pyc
+¦   ¦           __init__.cpython-38.pyc
+¦   ¦           
+¦   +---models
+¦   ¦   ¦   database_models.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           database_models.cpython-312.pyc
+¦   ¦           database_models.cpython-38.pyc
+¦   ¦           __init__.cpython-312.pyc
+¦   ¦           __init__.cpython-38.pyc
+¦   ¦           
+¦   +---services
+¦   ¦   ¦   data_processing_service.py
+¦   ¦   ¦   data_visualization_service.py
+¦   ¦   ¦   machine_learning_service.py
+¦   ¦   ¦   __init__.py
+¦   ¦   ¦   
+¦   ¦   +---__pycache__
+¦   ¦           data_processing_service.cpython-312.pyc
+¦   ¦           data_processing_service.cpython-38.pyc
+¦   ¦           data_visualization_service.cpython-312.pyc
+¦   ¦           machine_learning_service.cpython-312.pyc
+¦   ¦           __init__.cpython-312.pyc
+¦   ¦           __init__.cpython-38.pyc
+¦   ¦           
+¦   +---__pycache__
+¦           __init__.cpython-312.pyc
+¦           __init__.cpython-38.pyc
+¦           
++---config
+¦   ¦   config.py
+¦   ¦   __init__.py
+¦   ¦   
+¦   +---__pycache__
+¦           config.cpython-312.pyc
+¦           config.cpython-38.pyc
+¦           __init__.cpython-312.pyc
+¦           __init__.cpython-38.pyc
+¦           
++---static
+¦       styles.css
+¦       
++---templates
+¦       index.html
+¦       
++---tests
+    ¦   __init__.py
+    ¦   
+    +---unit
+            test_data_processing.py
+            test_machine_learning.py
+            __init__.py
+            

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Upload</title>
+</head>
+<body>
+    <h1>CSV Upload</h1>
+    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" required>
+        <label for="x_rows">Display x rows:</label>
+        <input type="number" name="x_rows" value="10">
+        <input type="submit" value="Upload and Display">
+    </form>
+    
+    {% if data_head %}
+        {% if data_head is string %}
+            <p>{{ data_head | safe }}</p>
+        {% else %}
+            {% if not data_head.empty %}
+                <h2>Head of the Dataset</h2>
+                {{ data_head.head().to_html() | safe }}
+            {% else %}
+                <p>No data available.</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</body>
+</html>
