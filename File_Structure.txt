@@ -1,11 +1,10 @@
 Folder PATH listing for volume OS
 Volume serial number is F020-53CC
 C:.
+¦   FileStructure.txt
 ¦   file_structure_explaination.txt
 ¦   README.md
 ¦   run.py
-¦   tree.txt
-¦   tree_new.txt
 ¦   
 +---app
 ¦   ¦   __init__.py
@@ -50,6 +49,9 @@ C:.
 ¦   ¦           __init__.cpython-312.pyc
 ¦   ¦           __init__.cpython-38.pyc
 ¦   ¦           
+¦   +---templates
+¦   ¦       index.html
+¦   ¦       
 ¦   +---__pycache__
 ¦           __init__.cpython-312.pyc
 ¦           __init__.cpython-38.pyc
@@ -66,9 +68,6 @@ C:.
 ¦           
 +---static
 ¦       styles.css
-¦       
-+---templates
-¦       index.html
 ¦       
 +---tests
     ¦   __init__.py
