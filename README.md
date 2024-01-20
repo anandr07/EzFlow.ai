@@ -98,7 +98,7 @@ This comprehensive process flow involves a user-friendly frontend, a robust back
 
 This section outlines the workflow from building the frontend UI to setting up a robust backend, creating a structured database, and leveraging a virtual machine for machine learning processes.
 
-## Code Structure: Has been modified check - https://github.com/anandr07/EzFlow.ai/blob/main/tree.txt
+## Code/File Structure: Has been modified check - https://github.com/anandr07/EzFlow.ai/blob/main/File_Structure.txt
 project-root/
 |-- frontend/
 | |-- src/
