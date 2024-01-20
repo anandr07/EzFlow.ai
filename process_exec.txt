@@ -1,0 +1,27 @@
+Initialization/Starting of Execution:
+
+The Flask app is started by initializing it in app/init.py using the line app = Flask(__name__).
+Configuration settings for the app are applied using app.config.from_object(Config).
+Various controllers are imported, including data_processing_controller.py.
+Route Definitions:
+
+In data_processing_controller.py, two routes are defined using decorators.
+@app.route('/'): This route is linked to the index function, responsible for rendering the main page.
+@app.route('/upload', methods=['POST']): This route is linked to the upload_file function, which handles file uploads.
+Triggering the Routes:
+
+When the Flask development server is running (python run.py), it listens for incoming HTTP requests.
+Accessing the root URL ('/') triggers the index function in data_processing_controller.py.
+Submitting a file through the upload form triggers the upload_file function in data_processing_controller.py.
+Execution of upload_file:
+
+Inside the upload_file function, it checks if a file is present in the request.
+If a file is present, it calls the process_uploaded_file function from data_processing_service.py for file processing.
+Depending on the result, it renders the index.html template with the processed data or an error message.
+Execution of process_uploaded_file:
+
+The process_uploaded_file function in data_processing_service.py reads the uploaded CSV file, processes it, and returns the head of the dataset.
+Rendering HTML Template:
+
+The processed data (head of the dataset or error message) is then passed to the render_template function along with the index.html template.
+The HTML template (index.html) renders the page with the provided data.
