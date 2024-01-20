@@ -10,7 +10,7 @@
     <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
         <input type="file" name="file" accept=".csv" required>
         <label for="x_rows">Display x rows:</label>
-        <input type="number" name="x_rows" value="10">
+        <input type="number" name="x_rows" value="5">
         <input type="submit" value="Upload and Display">
     </form>
     
