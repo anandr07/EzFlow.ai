@@ -13,7 +13,7 @@ from app.services.data_processing_service import process_uploaded_file
 
 @app.route('/')
 def index():
-    return render_template('index.html', data_head=None)  # Pass data_head as None initially
+    return render_template('index.html', data_head=None)  # Pass data_head as None initially 
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
