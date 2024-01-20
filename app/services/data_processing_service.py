@@ -13,7 +13,7 @@ def process_uploaded_file(file):
         
         df = pd.read_csv(file)
 
-        x_rows = 10  # Set a default value
+        x_rows = 5  # Set a default value
         if 'x_rows' in request.form:
             x_rows = int(request.form['x_rows'])
 
