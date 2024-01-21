@@ -29,7 +29,7 @@ def upload_file():
         data_head = process_uploaded_file(file)
 
         if isinstance(data_head, pd.DataFrame):
-            return render_template('index.html', data_head=data_head.head().to_html())
+            return render_template('index.html', data_head=data_head.to_html())  
         else:
             return render_template('index.html', error_message="Invalid file content. Please upload a valid CSV file.")
 

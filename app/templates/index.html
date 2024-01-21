@@ -20,12 +20,12 @@
         {% else %}
             {% if not data_head.empty %}
                 <h2>Head of the Dataset</h2>
-                {{ data_head.head().to_html() | safe }}
+                {{ data_head.to_html() | safe }}
             {% else %}
                 <p>No data available.</p>
             {% endif %}
         {% endif %}
     {% endif %}
+    
 </body>
 </html>
-    
