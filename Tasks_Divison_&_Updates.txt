@@ -13,9 +13,11 @@ Realease 1.0
 	2.2 Handle Missing Values - Drop Rows - Gaurav & Abhradeep
 	2.3 Handle Missing Values - Imputations - Mean/Median/Mode - (Dropdown) - To be scaled further - Shreya, Richik & Gaurav
 	2.4 Find String, or any other data types not fitting into the Column Label(Continous or Categorical). - Saniya & Surya 
-	2.5 Drop Columns - Ask user - Saniya & Surya 
-	2.6 id/slno/index - Ask user do you want to drop this # Temp - Scale Further 
-
+	2.5 Drop Columns - Ask user - Saniya & Surya  
+#NEW2.6 Drop Duplicates - Ask User - By Default - Select "Yes"
+#NEW2.7 Outliers Removal - Drop Down - IQR, LOF,etc - Ask User - By Default - IQR.
+	2.8 id/slno/index - Ask user do you want to drop this # Temp - Scale Further 
+ 
 Release 2.0 
 
 3. Data Visualization: TBU	
