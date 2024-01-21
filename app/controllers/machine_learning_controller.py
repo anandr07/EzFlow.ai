@@ -5,6 +5,8 @@
 If a new change is made make sure it doesn't affect the earlier codes.
 '''
 
+# IMPORTANT : We will be using LazyRegressor (Semi-Automated ML Training Module) for Out Training purpose. 
+
 # from flask import render_template, request, jsonify
 # from app import db, create_app
 
