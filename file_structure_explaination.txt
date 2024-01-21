@@ -1,7 +1,7 @@
 
 run.py: This is the main entry point for our Flask application. It initializes and runs the Flask app.
 
-app/__init__.py: This file initializes the Flask app and sets up the database (using SQLAlchemy). It also defines the create_app function that creates and configures the Flask app instance.
+app/__init__.py: This file initializes the Flask app and sets up the database (using SQLAlchemy) - (Databse Connection - This is not yet Implemented). It also defines the create_app function that creates and configures the Flask app instance.
 
 app/controllers/__init__.py: Initializes the controllers package. This file will include any setup needed for the controllers.
 
@@ -11,22 +11,22 @@ app/controllers/machine_learning_controller.py: This file contains routes and lo
 
 app/controllers/data_visualization_controller.py: This file contains routes and logic related to data visualization.
 
-app/models/database_models.py: Defines the database models, including RawData and ProcessedData using SQLAlchemy.
+app/models/database_models.py: Defines the database models, including RawData and ProcessedData using SQLAlchemy. - Yet to be Implemented
 
 app/services/__init__.py: Initializes the services package. Include any setup needed for the services.
 
 app/services/data_processing_service.py: Contains the business logic for processing data. This includes functions for data cleaning, transformation, and other processing tasks.
 
-app/services/machine_learning_service.py: This file contains services related to machine learning. 
+app/services/machine_learning_service.py: This file contains services related to machine learning. - Yet to be Implemented
 
-app/services/data_visualization_service.py: This file contains services related to data visualization. 
+app/services/data_visualization_service.py: This file contains services related to data visualization. - Yet to be Implemented
 
-config/config.py: Configuration file for our Flask app. It includes settings related to the app, database, or other configurations.
+config/config.py: Configuration file for our Flask app. It includes settings related to the app, database, or other configurations. - Need to added more config, # Added Database Connection
 
 templates/index.html: HTML template for the main page of our application. It includes a form for uploading data. - TBU
 
 static/styles.css: CSS file for styling our HTML templates. -TBU
 
-tests/unit/test_data_processing.py: Unit tests for the data processing functionality. - Currently empty - TBU
+tests/unit/test_data_processing.py: Unit tests for the data processing functionality. - Currently empty - TBU # No Test Cases for DataViz 
 
-instance: This directory contains instance-specific configuration files. - This is not a clear concept yet. Have to decide to keep or remove this. Decide to keep to remove this. 
+instance: This directory contains instance-specific configuration files. - This is not a clear concept yet. Have to decide to keep or remove this. Decide to keep to remove this. # Mostly will not be used.

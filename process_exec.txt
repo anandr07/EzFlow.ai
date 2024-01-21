@@ -1,5 +1,7 @@
 Initialization/Starting of Execution:
 
+# Execute the run.py file 
+
 The Flask app is started by initializing it in app/init.py using the line app = Flask(__name__).
 Configuration settings for the app are applied using app.config.from_object(Config).
 Various controllers are imported, including data_processing_controller.py.
