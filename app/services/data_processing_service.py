@@ -11,7 +11,7 @@ from flask import request
 def process_uploaded_file(file):
     try:
         
-        df = pd.read_csv(file)
+        df = file
 
         x_rows = 5  # Set a default value
         if 'x_rows' in request.form:

@@ -28,7 +28,7 @@
     {% endif %}
     <h1>Data Imputation</h1>
     <form action="{{ url_for('imputation') }}" method="post">
-        <input type="hidden" name="data" value="{{ session['uploaded_file_path'] }}">
+        <input type="hidden" name="data" value="{{ imputed_data_df }}">
         <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
     </form>
     
@@ -37,7 +37,7 @@
         <h2>Head of the Dataset</h2>
         {{ data_impute | safe }}
     {% else %}
-        <p>No data available or imputation not yet performed.</p>
+        <p>No data available or imputation not yet performed,jinja.</p>
     {% endif %}
 {% endif %}
     
