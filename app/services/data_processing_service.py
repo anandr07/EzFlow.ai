@@ -8,6 +8,9 @@ If a new change is made make sure it doesn't affect the earlier codes.
 import pandas as pd
 from flask import request
 
+
+custom_col_labels = {}
+
 def process_uploaded_file(file):
     try:
         
@@ -24,8 +27,32 @@ def process_uploaded_file(file):
         # Handle exceptions, log or print an error message
         print(f"Error processing file: {e}")
         return None
+    
+    
 
 
-## DONOT CHANGE THIS FILE 
 
+## DONOT CHANGE THIS FILE
+
+
+def col_labelling(data):
+    
+    global data
+    
+    global custom_col_labels
+    for col in data.columns:
+        if data[col].dtype == 'object':
+            custom_col_labels[col] = 'categorical'
+        
+        else:
+            unique_values_ratio = len(data) / data[col].nunique()
+            
+            # max_nunique = data.nunique().max()
+
+            
+            if unique_values_ratio > 11:
+                custom_col_labels[col] = 'categorical'
+            else:
+                custom_col_labels[col] = 'numerical'
+                
 
