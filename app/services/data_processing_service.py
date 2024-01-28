@@ -36,7 +36,7 @@ def perform_imputation(file):
                 df[col].fillna(df[col].mean(), inplace=True)
             else:
                 df[col].fillna('Missing', inplace=True)
-        return df
+        return df.head()
     except Exception as e:
         print(f"No file {e}")
         return None
