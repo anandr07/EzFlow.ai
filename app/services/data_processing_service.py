@@ -11,7 +11,7 @@ from flask import request
 def process_uploaded_file(file):
     try:
         
-        df = pd.read_csv(file)
+        df = file
 
         x_rows = 5  # Set a default value
         if 'x_rows' in request.form:
@@ -27,3 +27,16 @@ def process_uploaded_file(file):
 
 
 ## DONOT CHANGE THIS FILE 
+
+def perform_imputation(file):
+    try:
+        df=file
+        for col in df.columns:
+            if df[col].dtype == 'float64' or df[col].dtype == 'int64':
+                df[col].fillna(df[col].mean(), inplace=True)
+            else:
+                df[col].fillna('Missing', inplace=True)
+        return df.head()
+    except Exception as e:
+        print(f"No file {e}")
+        return None
