@@ -13,7 +13,7 @@ from app.services.data_processing_service import process_uploaded_file
 
 @app.route('/')
 def index():
-    return render_template('index.html', data_head=None)  # Pass data_head as None initially 
+    return render_template('index.html', data_head=None, data_des= None)  # Pass data_head as None initially 
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -26,10 +26,10 @@ def upload_file():
         return redirect(url_for('index'))
 
     if file:
-        data_head = process_uploaded_file(file)
+        data_head, data_des = process_uploaded_file(file)
 
-        if isinstance(data_head, pd.DataFrame):
-            return render_template('index.html', data_head=data_head.to_html())  
+        if isinstance(data_head, pd.DataFrame) and isinstance(data_des, pd.DataFrame):
+            return render_template('index.html', data_head=data_head.to_html(),data_des=data_des.to_html())  
         else:
             return render_template('index.html', error_message="Invalid file content. Please upload a valid CSV file.")
 
@@ -41,3 +41,5 @@ def upload_file():
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
 
 
+
+# %%

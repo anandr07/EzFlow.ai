@@ -18,12 +18,14 @@ def process_uploaded_file(file):
             x_rows = int(request.form['x_rows'])
 
         data_head = df.head(x_rows)
+        data_des = df.describe()
 
-        return data_head  
+        return data_head , data_des 
     except Exception as e:
         # Handle exceptions, log or print an error message
         print(f"Error processing file: {e}")
         return None
+
 
 
 ## DONOT CHANGE THIS FILE 

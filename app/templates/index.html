@@ -26,6 +26,19 @@
             {% endif %}
         {% endif %}
     {% endif %}
+
+    {% if data_des %}
+        {% if data_des is string %}
+            <p>{{ data_des | safe }}</p>
+        {% else %}
+            {% if not data_des.empty %}
+                <h2>Description of Data</h2>
+                {{ data_des.to_html() | safe }}
+            {% else %}
+                <p>No data available.</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
     
 </body>
 </html>
