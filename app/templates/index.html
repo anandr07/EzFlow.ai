@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -41,4 +41,143 @@
     {% endif %}
     
 </body>
+</html> -->
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Upload</title>
+</head>
+<body>
+    <h1>CSV Upload</h1>
+    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" required>
+        <label for="x_rows">Display x rows:</label>
+        <input type="number" name="x_rows" value="5">
+
+        {% if column_names %}
+            <h2>Select Data Types</h2>
+            {% for column in column_names %}
+                <div>
+                    <label>{{ column }}</label>
+                    <input type="radio" name="data_types[{{ column }}]" value="continuous" checked> Continuous
+                    <input type="radio" name="data_types[{{ column }}]" value="categorical"> Categorical
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <input type="submit" value="Upload and Display">
+    </form>
+    
+    {% if data_head %}
+        {% if data_head is string %}
+            <p>{{ data_head | safe }}</p>
+        {% else %}
+            {% if not data_head.empty %}
+                <h2>Head of the Dataset</h2>
+                {{ data_head.to_html() | safe }}
+            {% else %}
+                <p>No data available.</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if data_des %}
+        {% if data_des is string %}
+            <p>{{ data_des | safe }}</p>
+        {% else %}
+            {% if not data_des.empty %}
+                <h2>Description of Data</h2>
+                {{ data_des.to_html() | safe }}
+            {% else %}
+                <p>No data available.</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    
+</body>
+</html> -->
+
+<!-- app/templates/index.html -->
+
+<!-- app/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Upload</title>
+</head>
+<body>
+    <h1>CSV Upload</h1>
+    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" required>
+        <label for="x_rows">Display x rows:</label>
+        <input type="number" name="x_rows" value="5">
+        <input type="submit" value="Upload and Display">
+    </form>
+    
+    {% if data_head %}
+        {% if data_head is string %}
+            <p>{{ data_head | safe }}</p>
+        {% else %}
+            {% if not data_head.empty %}
+                <h2>Head of the Dataset</h2>
+                {{ data_head.to_html() | safe }}
+            {% else %}
+                <p>No data available.</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if data_des %}
+        {% if data_des is string %}
+            <p>{{ data_des | safe }}</p>
+        {% else %}
+            {% if not data_des.empty %}
+                <h2>Description of Data</h2>
+                {{ data_des.to_html() | safe }}
+            {% else %}
+                <p>No data available.</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    <form action="{{ url_for('get_user_labels_route') }}" method="post">
+        <!-- Your code for user-labeled columns form goes here -->
+        <!-- For example, radio buttons for each column -->
+        {% if column_names %}
+            {% for column in column_names %}
+                <label for="{{ column }}">{{ column }}</label>
+                <input type="radio" name="{{ column }}" value="continuous"> Continuous
+                <input type="radio" name="{{ column }}" value="categorical"> Categorical
+                <br>
+            {% endfor %}
+            <input type="submit" value="Submit Column Labels">
+        {% else %}
+            <p>No columns available. Please upload a valid CSV file.</p>
+        {% endif %}
+    </form>
+
+    {% if user_labeled_col %}
+        <h2>User-Labeled Columns</h2>
+        <table border="1">
+            <tr>
+                <th>Column Name</th>
+                <th>User Label</th>
+            </tr>
+            {% for col, label in user_labeled_col.items() %}
+                <tr>
+                    <td>{{ col }}</td>
+                    <td>{{ label }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
 </html>
+
+
+
