@@ -18,8 +18,8 @@ def process_uploaded_file(file):
             x_rows = int(request.form['x_rows'])
 
         data_head = df.head(x_rows)
-
-        return data_head  
+    
+        return data_head
     except Exception as e:
         # Handle exceptions, log or print an error message
         print(f"Error processing file: {e}")
@@ -39,4 +39,15 @@ def perform_imputation(file):
         return df.head()
     except Exception as e:
         print(f"No file {e}")
+        return None
+    
+
+def drop_selected_columns(file, columns_to_drop):
+    print(columns_to_drop)
+    try:
+        df= file
+        df.drop(columns_to_drop, axis=1, inplace=True)
+        return df
+    except Exception as e:
+        print(f"No File: {e}")
         return None

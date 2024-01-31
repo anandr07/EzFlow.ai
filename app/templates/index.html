@@ -4,6 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSV Upload</title>
+
+    <!-- Bootstrap CSS library -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script>
+//    function updateTable(col_idx) {
+//             console.log(col_idx);
+//             var selectedColumn = document.getElementById("columnSelect").value;
+//             var table = document.getElementsByClassName("dataframe")[0];
+//             var rows = table.getElementsByTagName("tr");
+//             for (var i = 0; i < rows.length; i++) {
+//                 var cells = rows[i].cells;
+//                 // Hide all cells in this row
+//                 for (var j = 0; j < cells.length; j++) {
+//                     cells[j].style.display = 'none';
+//                 }
+
+//                 // Show selected column
+//                 if (selectedColumn == "all") {
+//                     for (var j = 0; j < cells.length; j++) {
+//                         cells[j].style.display = '';
+//                     }
+//                 } else {
+//                     for (var j = 0; j < cells.length; j++) {
+//                         if (j == col_idx) {
+//                             cells[j].style.display = '';
+//                         }
+//                     }
+//                 }
+//             }
+//         }   
+
+        function toggleDropdown() {
+            var dropColumnsValue = document.getElementById("drop_columns").value;
+            var columnDropdown = document.getElementById("columnDropdown");
+
+            if (dropColumnsValue == "yes") {
+                columnDropdown.style.display = "block";
+            } else {
+                columnDropdown.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>CSV Upload</h1>
@@ -26,6 +68,8 @@
             {% endif %}
         {% endif %}
     {% endif %}
+
+
     <h1>Data Imputation</h1>
     <form action="{{ url_for('imputation') }}" method="post">
         <input type="hidden" name="data" value="{{ imputed_data_df }}">
@@ -37,10 +81,40 @@
         <h2>Head of the Dataset</h2>
         {{ data_impute | safe }}
     {% else %}
-        <p>No data available or imputation not yet performed,jinja.</p>
+        <p>No data available or imputation not yet performed.</p>
     {% endif %}
 {% endif %}
-    
 
+<div class='table table-sm' style="width: 100%;">
+    <!-- Dropdown for selecting columns -->
+<!--<select id="columnSelect" onchange="updateTable(this.options.selectedIndex)" multiple>
+        <option value="all">All Columns</option>
+        {% for item in col_name %}
+            <option value="{{item}}">{{item}}</option>
+        {% endfor %}
+    </select>-->    
+
+    <div class='table table-sm' style="width: 100%;">
+        <!-- Dropdown for selecting columns -->
+        <form action="{{ url_for('drop_columns') }}" method="post">
+            <label for="drop_columns">Do you want to drop columns?</label>
+            <select id="drop_columns" name="drop_columns" onchange="toggleDropdown()">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <!-- Dropdown for selecting columns to drop -->
+            <div id="columnDropdown" style="display: none;">
+                <label for="columns_to_drop">Which columns do you want to drop?</label>
+                <select id="columns_to_drop" name="columns_to_drop" multiple>
+                    {% for item in col_name %}
+                        <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="confirm_drop" value="Yes" class="btn btn-danger">Drop Columns</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
