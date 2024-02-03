@@ -9,7 +9,7 @@ If a new change is made make sure it doesn't affect the earlier codes.
 import pandas as pd
 from flask import render_template, request, redirect, url_for
 from app import app
-from app.services.data_processing_service import drop_selected_columns, process_uploaded_file
+from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling
 from app.services.data_processing_service import perform_imputation
 # import os
 # import tempfile
@@ -32,6 +32,7 @@ def upload_file():
     
     # Here the file is being inputted.
     file = request.files['file']
+    
 
     if file.filename == '':
         return redirect(url_for('index'))
@@ -56,6 +57,20 @@ def upload_file():
 
 
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
+@app.route('/compute_custom_labels', methods=['POST'])
+def compute_custom_labels():
+    global data
+    global custom_col_labels
+    Custom_labelling = True
+
+    try:
+        custom_col_labels = col_labelling(data)
+        return render_template('index.html', custom_labels=custom_col_labels, Custom_labelling=Custom_labelling)
+
+    except Exception as e:
+        return render_template('index.html', error_message=f"An error occurred during custom label computation: {e}", Custom_labelling=Custom_labelling)
+
+
 @app.route('/data_impuation', methods=['POST'])
 def imputation():
     global data #Here the data is being called from the global scope
