@@ -13,32 +13,43 @@ user_labeled_col = {}
 def process_uploaded_file(file):
     try:
         
-        df = pd.read_csv(file)
+        df = file
 
         x_rows = 5  # Set a default value
         if 'x_rows' in request.form:
             x_rows = int(request.form['x_rows'])
 
         data_head = df.head(x_rows)
-        data_des = df.describe()
-        column_names = df.columns.tolist()
-
-        return data_head , data_des , column_names 
+    
+        return data_head
     except Exception as e:
         # Handle exceptions, log or print an error message
         print(f"Error processing file: {e}")
         return None
 
 
-
 ## DONOT CHANGE THIS FILE 
+
+def perform_imputation(file):
+    try:
+        df=file
+        for col in df.columns:
+            if df[col].dtype == 'float64' or df[col].dtype == 'int64':
+                df[col].fillna(df[col].mean(), inplace=True)
+            else:
+                df[col].fillna('Missing', inplace=True)
+        return df.head()
+    except Exception as e:
+        print(f"No file {e}")
+        return None
     
-#%%
-def get_user_labels():
-    global user_labeled_col
 
-    if request.method == 'POST':
-        for col in user_labeled_col:
-            user_labeled_col[col] = request.form.get(col, 'unknown')
-
-    return user_labeled_col
+def drop_selected_columns(file, columns_to_drop):
+    print(columns_to_drop)
+    try:
+        df= file
+        df.drop(columns_to_drop, axis=1, inplace=True)
+        return df
+    except Exception as e:
+        print(f"No File: {e}")
+        return None
