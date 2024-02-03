@@ -64,6 +64,11 @@
         </form>
     </div>
 
+    <h1>Compute Custom Labels</h1>
+    <form action="{{ url_for('compute_custom_labels') }}" method="post">
+        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
+    </form>
+
     <h1>Data Imputation</h1>
     <form action="{{ url_for('imputation') }}" method="post">
         <input type="hidden" name="data" value="{{ imputed_data_df }}">
@@ -79,11 +84,6 @@
         {% endif %}
     {% endif %}
 
-    <h1>Compute Custom Labels</h1>
-    <form action="{{ url_for('compute_custom_labels') }}" method="post">
-        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
-    </form>
-    
     {% if Custom_labelling %}
         <h2>Custom Labels</h2>
         <table border="1">
