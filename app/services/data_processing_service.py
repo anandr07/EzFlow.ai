@@ -32,6 +32,9 @@ def process_uploaded_file(file):
 ## DONOT CHANGE THIS FILE 
 
 def col_labelling(data):
+    global custom_col_labels
+    custom_col_labels = {}
+
     for col in data.columns:
         if data[col].dtype == 'object':
             custom_col_labels[col] = 'categorical'
@@ -41,7 +44,7 @@ def col_labelling(data):
                 custom_col_labels[col] = 'categorical'
             else:
                 custom_col_labels[col] = 'numerical'
-
+    return custom_col_labels
 
 def perform_imputation(file):
     try:

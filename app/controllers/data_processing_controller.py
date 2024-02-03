@@ -59,17 +59,17 @@ def upload_file():
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
 @app.route('/compute_custom_labels', methods=['POST'])
 def compute_custom_labels():
-    global data #Here the data is being called from the global scope
-    Custom_labelling = True 
+    global data
+    global custom_col_labels
+    Custom_labelling = True
 
     try:
-        custom_labelled_data = col_labelling(data)
-        # Render the result
-        return render_template('index.html', custom_labels=custom_labelled_data.to_html(), Custom_labelling=Custom_labelling) # Here the imputed data is outputted in the webpage
+        custom_col_labels = col_labelling(data)
+        return render_template('index.html', custom_labels=custom_col_labels, Custom_labelling=Custom_labelling)
 
     except Exception as e:
-        return render_template('index.html', error_message=f"An error occurred during imputation: {e}", Custom_labelling=Custom_labelling)
-    
+        return render_template('index.html', error_message=f"An error occurred during custom label computation: {e}", Custom_labelling=Custom_labelling)
+
 
 @app.route('/data_impuation', methods=['POST'])
 def imputation():
