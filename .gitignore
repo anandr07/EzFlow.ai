@@ -1,1 +1,3 @@
-*.pyc
+app\controllers\__pycache__/*
+app\services\__pycache__/*
+config\__pycache__/*
