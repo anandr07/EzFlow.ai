@@ -7,6 +7,7 @@ If a new change is made make sure it doesn't affect the earlier codes.
 
 import pandas as pd
 from flask import request
+import numpy as np
 
 user_labeled_col = {} 
 custom_col_labels ={}
@@ -45,6 +46,35 @@ def col_labelling(data):
             else:
                 custom_col_labels[col] = 'numerical'
     return custom_col_labels
+
+def dropping_rows_with_missing_value(file):
+    try:
+        df = file
+        print("Columns with missing values:", [column for column in df.columns if df[column].isnull().any()])
+
+    # Identify features with more than 60% missing values
+        features_with_na = {}
+        # print("col:",df.columns)
+        for feature_names in df.columns:
+            if df[feature_names].isnull().sum() > 1:
+                missing_percentage = np.round(df[feature_names].isnull().mean() * 100, 4)
+                features_with_na[feature_names] = missing_percentage
+
+        # Print feature names and their respective percentage of missing values
+        #print("sadas",len(features_with_na))
+        for feature, missing_percentage in features_with_na.items():
+            print(f"{feature}: {missing_percentage}% missing values")
+
+
+        # Drop rows with missing values in columns having more than 80% missing values
+            df.dropna(subset=features_with_na, inplace=True)
+        # returning the DataFrame after dropping rows
+            return df,features_with_na
+        
+    except Exception as e:
+        print(f"No file {e}")
+        return None
+
 
 def perform_imputation(file):
     try:
