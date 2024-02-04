@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Upload</title>
+    <title>Ezflow.ai</title>
 
     <!-- Bootstrap CSS library -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -21,7 +21,8 @@
     </script>
 </head>
 <body>
-    <h1>CSV Upload</h1>
+    <h1>Ezflow.ai</h1>
+    <h3>EzFlow.ai, your go-to platform for effortlessly turning raw tabular data into powerful machine learning models! EzFlow.ai is an intuitive and user-friendly software product designed to democratize machine learning, making it accessible to everyone, regardless of their expertise.</h3>
     <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
         <input type="file" name="file" accept=".csv" required>
         <label for="x_rows">Display x rows:</label>
@@ -63,6 +64,24 @@
             </div>
         </form>
     </div>
+
+    <!-- Dropping Rows Section -->
+    <h1>Dropping Rows with Missing Values</h1>
+    <form action="{{ url_for('dropping_rows_missing_values') }}" method="post">
+        <input type="hidden" name="data" value="{{ df }}">
+        <button type="submit" class="btn btn-primary">Dropping Rows with Missing Values</button>
+    </form>
+
+    {% if dropping_rows_attempted %}
+        {% if features_na_values_perc %}
+            <h2>Values Dropped</h2>
+            {{ features_na_values_perc | safe }}
+        {% else %}
+            <p>No rows dropped</p>
+        {% endif %}
+    {% endif %}
+
+    
 
     <h1>Compute Custom Labels</h1>
     <form action="{{ url_for('compute_custom_labels') }}" method="post">

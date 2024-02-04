@@ -10,7 +10,8 @@ import pandas as pd
 from flask import render_template, request, redirect, url_for
 from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling
-from app.services.data_processing_service import perform_imputation
+from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value
+
 # import os
 # import tempfile
 
@@ -69,6 +70,22 @@ def compute_custom_labels():
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during custom label computation: {e}", Custom_labelling=Custom_labelling)
+
+
+@app.route('/dropping_rows_with_missing_values' , methods=['POST'])
+def dropping_rows_missing_values():
+    global data #here the data is being called for global scope
+    dropping_rows_attempted=True
+    try:
+        df, features_na_values_perc = dropping_rows_with_missing_value(data) #df and features with na are returned
+        # print(features_na_values_perc)
+        # df = datarows_missing_values[0]
+        # features_na_values_perc = datarows_missing_values[1]
+
+        return render_template('index.html', dropping_rows_attempted=dropping_rows_attempted, features_na_values_perc = features_na_values_perc) # Here the  data after dropping the rows is outputted in the webpage
+
+    except Exception as e:
+        return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted=dropping_rows_attempted)
 
 
 @app.route('/data_impuation', methods=['POST'])
