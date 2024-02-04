@@ -26,6 +26,7 @@
             {% endif %}
         {% endif %}
     {% endif %}
+<<<<<<< Updated upstream
     <h1>Data Imputation</h1>
     <form action="{{ url_for('imputation') }}" method="post">
         <input type="hidden" name="data" value="{{ imputed_data_df }}">
@@ -42,5 +43,171 @@
 {% endif %}
     
 
+=======
+
+    <div class='table table-sm' style="width: 100%;">
+        <!-- Dropdown for selecting columns to drop -->
+        <form action="{{ url_for('drop_columns') }}" method="post">
+            <label for="drop_columns">Do you want to drop columns?</label>
+            <select id="drop_columns" name="drop_columns" onchange="toggleDropdown()">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <!-- Dropdown for selecting columns to drop -->
+            <div id="columnDropdown" style="display: none;">
+                <label for="columns_to_drop">Which columns do you want to drop?</label>
+                <select id="columns_to_drop" name="columns_to_drop" multiple>
+                    {% for item in col_name %}
+                        <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="confirm_drop" value="Yes" class="btn btn-danger">Drop Columns</button>
+            </div>
+        </form>
+    </div>
+
+    <h1>Compute Custom Labels</h1>
+    <form action="{{ url_for('compute_custom_labels') }}" method="post">
+        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
+    </form>
+
+    <style>
+        .colorful-heading {
+            background-color: #0c2a4a; /* Dark blue */
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    
+        .form-inline {
+            border: 2px solid #0c2a4a; /* Dark blue border to match the heading */
+            padding: 15px;
+            margin-bottom: 20px; /* Space before the form starts */
+            border-radius: 5px; /* Optional: rounds the corners */
+            display: flex; /* Aligns items in a row */
+            justify-content: center; /* Centers items horizontally */
+            gap: 10px; /* Adds space between inline items */
+        }
+    
+        .blue-dropdown, .btn-primary {
+            background-color: rgba(0, 123, 255, 0.6);
+            color: white;
+            border: 1px solid rgba(0, 123, 255, 0.6);
+            border-radius: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.9rem;
+        }
+    
+        .blue-dropdown:hover {
+            background-color: #28a745; /* Green on hover */
+            border-color: #28a745;
+        }
+    
+        .blue-dropdown:focus {
+            background-color: #1c7430; /* Dark green when focused */
+            border-color: #1c7430;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+    
+        .blue-dropdown option {
+            background-color: white;
+            color: #007bff;
+        }
+    
+        .btn-primary {
+            border-color: transparent; /* Removes default border color */
+        }
+    
+        .btn-primary:hover {
+            background-color: #ff0000; /* Red on hover */
+            border-color: #ff0000; /* Ensures border color matches background */
+        }
+    </style>
+    
+    <div class="colorful-heading">
+        <h1>Data Imputation</h1>
+    </div>
+    
+    <div class="form-inline"> <!-- Wrap elements in a div with class for inline display -->
+        <label for="impute_method">Choose imputation method:</label>
+        <select name="impute_method" id="impute_method" class="blue-dropdown">
+            <option value="mean">Mean</option>
+            <option value="median">Median</option>
+            <option value="mode">Mode</option>
+            <option value="foward_fill">Forward Fill</option>
+            <option value="backward_fill">Backward Fill</option>
+        </select>
+        <form action="{{ url_for('imputation') }}" method="post">
+            <input type="hidden" name="data" value="{{ imputed_data_df }}">
+            <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
+        </form>
+    </div>
+    
+    
+    
+    
+    {% if imputation_attempted %}
+        {% if data_impute %}
+            <h2>Head of the Dataset</h2>
+            {{ data_impute | safe }}
+        {% else %}
+            <p>No data available or imputation not yet performed.</p>
+        {% endif %}
+    {% endif %}
+
+    {% if Custom_labelling %}
+        <h2>Custom Labels</h2>
+        <table border="1">
+            <tr>
+                <th>Column Name</th>
+                <th>Custom Label</th>
+            </tr>
+            {% for col, label in custom_labels.items() %}
+                <tr>
+                    <td>{{ col }}</td>
+                    <td>{{ label }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>No custom labels available.</p>
+    {% endif %}
+
+    <div class="colorful-heading">
+    <h2>Dataframe ID Column Operations</h2>
+    </div>  
+    <div class="form-inline">  
+    <!-- Button to identify ID column -->
+    <form action="/identify_id_column" method="post">
+        <button type="submit" class="btn btn-primary">Identify ID Column</button>
+    </form>
+    <form action="/remove_id_column" method="post">
+        <button type="submit" class="btn btn-primary">Remove ID Column</button>
+    </form>
+    </div>  
+    <div id="data-area">
+        {% if atm %}
+            {% if id_col %}
+                {{ id_col|safe }}
+            {% else %}
+            <p> No Id column </p>
+            {% endif %}
+        {% endif %}
+        
+        
+    </div>
+    <!-- Button to remove ID column -->
+
+    <!-- Placeholder for displaying DataFrame or messages -->
+    <div id="data-area">
+        {% if data_id %}
+            {{ data_id|safe }}
+        {% endif %}
+    </div>
+>>>>>>> Stashed changes
 </body>
 </html>
