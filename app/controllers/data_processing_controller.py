@@ -7,9 +7,9 @@ If a new change is made make sure it doesn't affect the earlier codes.
 
 # Imports
 import pandas as pd
-from flask import render_template, request, redirect, url_for,session
+from flask import render_template, request, redirect, url_for
 from app import app
-from app.services.data_processing_service import process_uploaded_file
+from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling
 from app.services.data_processing_service import perform_imputation
 # import os
 # import tempfile
@@ -32,6 +32,7 @@ def upload_file():
     
     # Here the file is being inputted.
     file = request.files['file']
+    
 
     if file.filename == '':
         return redirect(url_for('index'))
@@ -46,7 +47,7 @@ def upload_file():
         data_head = process_uploaded_file(data)
 
         if isinstance(data_head, pd.DataFrame):
-            return render_template('index.html', data_head=data_head.to_html())  
+            return render_template('index.html', data_head=data_head.to_html(), col_name=data_head.columns.values.tolist())  
         else:
             return render_template('index.html', error_message="Invalid file content. Please upload a valid CSV file.")
 
@@ -56,18 +57,71 @@ def upload_file():
 
 
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
+@app.route('/compute_custom_labels', methods=['POST'])
+def compute_custom_labels():
+    global data
+    global custom_col_labels
+    Custom_labelling = True
+
+    try:
+        custom_col_labels = col_labelling(data)
+        return render_template('index.html', custom_labels=custom_col_labels, Custom_labelling=Custom_labelling)
+
+    except Exception as e:
+        return render_template('index.html', error_message=f"An error occurred during custom label computation: {e}", Custom_labelling=Custom_labelling)
+
+
 @app.route('/data_impuation', methods=['POST'])
 def imputation():
     global data #Here the data is being called from the global scope
     imputation_attempted = True 
+
     try:
         imputed_data_df = perform_imputation(data)
         print(f"Imputed Data: \n{imputed_data_df.head()}")
+
         # Render the result
         return render_template('index.html', data_impute=imputed_data_df.to_html(), imputation_attempted=imputation_attempted) # Here the imputed data is outputted in the webpage
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during imputation: {e}", imputation_attempted=imputation_attempted)
+    
 
+@app.route('/drop_columns', methods=['POST'])
+def drop_columns():
+    global data
 
+    if 'drop_columns' in request.form:
+        columns_to_drop = request.form.getlist('columns_to_drop')  # Get the list of columns to drop
+        print(f"Columns to drop: {columns_to_drop}")
+
+        if not columns_to_drop:
+            return render_template('index.html', error_message="No columns selected for dropping.")
+
+        # Passing selected columns to the confirmation page
+        return render_template('confirm_drop.html', columns_to_drop=columns_to_drop)
+
+    return redirect(url_for('index'))
+
+@app.route('/dropped_columns', methods=['POST'])
+def confirm_drop():
+    global data
+
+    if 'confirm_drop' in request.form:
+        confirm = request.form['confirm_drop']
+        columns_to_drop = request.form.getlist('columns_to_drop')  # Get the list of columns to drop
+
+        if confirm == 'Yes':
+            modified_data = drop_selected_columns(data, columns_to_drop)
+            print(modified_data)
+            data_head = process_uploaded_file(modified_data)
+
+            if data_head is not None:
+                return render_template('index.html', data_head=data_head.to_html(), col_name=data_head.columns.values.tolist())
+            else:
+                return render_template('index.html', error_message="An error occurred during column dropping.")
+        else:
+            return redirect(url_for('index'))
+
+    return redirect(url_for('index'))
 # %%

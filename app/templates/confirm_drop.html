@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Drop Columns</title>
+</head>
+<body>
+    <h1>Confirm Drop Columns</h1>
+    <p>Are you sure you want to drop the columns {{ columns_to_drop | join(', ') }}?</p>
+    <form action="{{ url_for('confirm_drop') }}" method="post">
+        <input type="hidden" name="columns_to_drop" value="{{ columns_to_drop | join(', ') }}">
+        <button type="submit" name="confirm_drop" value="Yes" class="btn btn-danger">Yes</button>
+        <button type="submit" name="confirm_drop" value="No" class="btn btn-secondary">No</button>
+    </form>
+    {% if data %}
+    {% if data is string %}
+        <p>{{ data | safe }}</p>
+    {% else %}
+        {% if not data.empty %}
+            <h2>Head of the Dataset</h2>
+            {{ data.to_html() | safe }}
+        {% else %}
+            <p>No data available.</p>
+        {% endif %}
+    {% endif %}
+{% endif %}
+</body>
+</html>

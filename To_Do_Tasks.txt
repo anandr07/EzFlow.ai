@@ -1,0 +1,23 @@
+Data processing:
+
+1. Display Data Information 
+	1.1 Display Option for Head & Tail - Done
+	1.2 Display Data Describe - Done 
+	1.3 Get columns labels from users - Explicitly - Sudhanshu & Saurav #NEW
+	1.4 Label or Get Labels for every column - Continous or Categorical - "Logic" or ask user. - Anand & Shanun
+	1.5 Display Data Info - Note the data type and change accordingly (Continous or Categorical) - "Datatype Logic" - Anand & Shanun
+
+Realease 1.0 
+
+2. Data Imputations: (Make a new Function) - Richik # Open to be scaled
+	2.1 Display Number of NA Values for Each Column - Sudhanshu & Saurav
+	2.2 Handle Missing Values - Drop Rows - Gaurav & Abhradeep
+	2.3 Handle Missing Values - Imputations - Mean/Median/Mode - (Dropdown) - To be scaled further - Shreya, Richik & Gaurav
+	2.4 Find String, or any other data types not fitting into the Column Label(Continous or Categorical). - Saniya & Surya, Amit  
+	2.5 Drop Columns - Ask user - Saniya & Surya, Amit 
+	2.6 id/slno/index - Ask user do you want to drop this # Temp - Scale Further 
+
+Release 2.0 
+
+3. Data Visualization: TBU	
+
