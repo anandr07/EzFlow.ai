@@ -7,7 +7,8 @@ If a new change is made make sure it doesn't affect the earlier codes.
 
 import pandas as pd
 from flask import request
-
+user_labeled_col={}
+custom_col_labels={}
 def process_uploaded_file(file):
     try:
         
@@ -27,21 +28,6 @@ def process_uploaded_file(file):
 
 
 ## DONOT CHANGE THIS FILE 
-
-<<<<<<< Updated upstream
-def perform_imputation(file):
-    try:
-        df=file
-        for col in df.columns:
-            if df[col].dtype == 'float64' or df[col].dtype == 'int64':
-                df[col].fillna(df[col].mean(), inplace=True)
-            else:
-                df[col].fillna('Missing', inplace=True)
-        return df.head()
-    except Exception as e:
-        print(f"No file {e}")
-        return None
-=======
 def col_labelling(data):
     global custom_col_labels
     custom_col_labels = {}
@@ -162,4 +148,3 @@ def process_dataframe_remove_id(df, drop_id=False):
     else:
         print("No ID column found.")
     return df.head()
->>>>>>> Stashed changes

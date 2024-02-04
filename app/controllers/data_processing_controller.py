@@ -7,17 +7,10 @@ If a new change is made make sure it doesn't affect the earlier codes.
 
 # Imports
 import pandas as pd
-<<<<<<< Updated upstream
-from flask import render_template, request, redirect, url_for,session
-from app import app
-from app.services.data_processing_service import process_uploaded_file
-from app.services.data_processing_service import perform_imputation
-=======
 from flask import render_template, request, redirect, url_for,jsonify
 from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling
 from app.services.data_processing_service import perform_imputation,find_id_column,process_dataframe_remove_id
->>>>>>> Stashed changes
 # import os
 # import tempfile
 
@@ -39,6 +32,7 @@ def upload_file():
     
     # Here the file is being inputted.
     file = request.files['file']
+    
 
     if file.filename == '':
         return redirect(url_for('index'))
@@ -53,7 +47,7 @@ def upload_file():
         data_head = process_uploaded_file(data)
 
         if isinstance(data_head, pd.DataFrame):
-            return render_template('index.html', data_head=data_head.to_html())  
+            return render_template('index.html', data_head=data_head.to_html(), col_name=data_head.columns.values.tolist())  
         else:
             return render_template('index.html', error_message="Invalid file content. Please upload a valid CSV file.")
 
@@ -63,12 +57,6 @@ def upload_file():
 
 
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
-<<<<<<< Updated upstream
-@app.route('/data_impuation', methods=['POST'])
-def imputation():
-    global data #Here the data is being called from the global scope
-    imputation_attempted = True 
-=======
 @app.route('/compute_custom_labels', methods=['POST'])
 def compute_custom_labels():
     global data
@@ -91,20 +79,21 @@ def imputation():
     # Extract the imputation method from the form data
     impute_method = request.form.get('impute_method', 'mean')  # Default to 'mean' if not specified
 
->>>>>>> Stashed changes
     try:
         imputed_data_df = perform_imputation(data, impute_method)
         print(f"Imputed Data: \n{imputed_data_df.head()}")
+
         # Render the result
         return render_template('index.html', data_impute=imputed_data_df.to_html(), imputation_attempted=imputation_attempted)
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during imputation: {e}", imputation_attempted=imputation_attempted)
+    
 
+@app.route('/drop_columns', methods=['POST'])
+def drop_columns():
+    global data
 
-<<<<<<< Updated upstream
-# %%
-=======
     if 'drop_columns' in request.form:
         columns_to_drop = request.form.getlist('columns_to_drop')  # Get the list of columns to drop
         print(f"Columns to drop: {columns_to_drop}")
@@ -155,4 +144,3 @@ def remove_id_column():
     global data
     data = process_dataframe_remove_id(data, drop_id=True)
     return render_template('index.html', data_id=data.to_html())
->>>>>>> Stashed changes
