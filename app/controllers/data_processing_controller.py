@@ -18,6 +18,7 @@ from app.services.data_processing_service import perform_imputation, dropping_ro
 
 # Here the data is being declared globally
 data=None
+modified_data = None
 
 
 @app.route('/')
@@ -46,7 +47,7 @@ def upload_file():
         # session['uploaded_file_path'] = temp_file_path
         data=pd.read_csv(file) # Here the csv file being transformed into a data frame for further usage
         data_head = process_uploaded_file(data)
-
+        print(data_head)
         if isinstance(data_head, pd.DataFrame):
             return render_template('index.html', data_head=data_head.to_html(), col_name=data_head.columns.values.tolist())  
         else:
@@ -58,6 +59,55 @@ def upload_file():
 
 
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
+# @app.route('/invoke_column_type_method', methods=['POST'])
+# def invoke_column_type_method():
+#     selected_method = request.form.get('column_type_method')
+
+#     if selected_method == 'manual':
+#         # Redirect to the manual column type selection method
+#         return redirect(url_for('column_type_selection'))
+#     elif selected_method == 'automatic':
+#         # Call the automatic column type computation method directly
+#         return redirect(url_for('compute_custom_labels'))
+#     else:
+#         # Handle other cases or show an error
+#         return render_template('index.html', error_message="Invalid method selected.")
+
+
+
+# Route to handle column type selection
+@app.route('/column_type_selection', methods=['POST'])
+def column_type_selection():
+    print("aa gaye")
+    # global data
+    try:
+        # data_head_local = data.head(3)
+        print("Hello")
+        col_names = modified_data.columns.tolist()
+        print("Hello2")
+        # print("data head ke baad", data_head)
+        # col_names = data_head.columns.tolist()
+        # print("colnames ke baad", col_names)
+        # col_names = data_head.columns.tolist()
+        if request.method == 'POST':
+            selected_column_types = {}
+            print("Hello")
+            for column in col_names:
+                selected_column_types[column] = request.form.get(column)
+
+            print("Selected Column Types:", selected_column_types)
+
+            return render_template('index.html', col_names=col_names)
+            # return {'message':'API success'}
+        return render_template('index.html', col_names=col_names)
+        # return {'message':'API success'}
+      
+    except Exception as e:
+        # print("nhi hua")
+        return render_template('index.html', error_message=f"An error occurred: {e}")
+        # return {'message':'API error'}
+
+
 @app.route('/compute_custom_labels', methods=['POST'])
 def compute_custom_labels():
     global data
@@ -122,13 +172,14 @@ def drop_columns():
 
 @app.route('/dropped_columns', methods=['POST'])
 def confirm_drop():
-    global data
+    global data, modified_data
 
     if 'confirm_drop' in request.form:
         confirm = request.form['confirm_drop']
         columns_to_drop = request.form.getlist('columns_to_drop')  # Get the list of columns to drop
 
         if confirm == 'Yes':
+            
             modified_data = drop_selected_columns(data, columns_to_drop)
             print(modified_data)
             data_head = process_uploaded_file(modified_data)

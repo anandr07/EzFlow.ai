@@ -65,6 +65,41 @@
         </form>
     </div>
 
+
+
+    <h2>Column Type Selection</h2>
+    <form action="{{ url_for('column_type_selection') }}" method="post">
+        <button type="submit" class="btn btn-primary">Manual</button>
+    </form>
+    <!-- <h2>Compute Custom Labels</h2> -->
+    <form action="{{ url_for('compute_custom_labels') }}" method="post">
+        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
+    </form>
+
+        
+    <h1>Column Type Selection</h1>
+    <!-- <p>Inside the method.</p> -->
+    <form action="{{ url_for('column_type_selection') }}" method="post">
+        <!-- <p>After form.</p> -->
+        {% if col_names %}
+            <p>col names avail</p>
+            <ul>
+                {% for column in col_names %}
+                    <li>
+                        <label>{{ column }}:</label>
+                        <input type="radio" id="{{ column }}_continuous" name="{{ column }}" value="Continuous" checked> Continuous
+                        <input type="radio" id="{{ column }}_categorical" name="{{ column }}" value="Categorical"> Categorical
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="btn btn-primary">Submit Column Types</button>
+            <form action ="{{ url_for('imputation') }}" method="post"></form>
+        {% else %}
+            <p>No column names available.</p>
+        {% endif %}
+    </form>
+
+
     <!-- Dropping Rows Section -->
     <h1>Dropping Rows with Missing Values</h1>
     <form action="{{ url_for('dropping_rows_missing_values') }}" method="post">
@@ -83,10 +118,6 @@
 
     
 
-    <h1>Compute Custom Labels</h1>
-    <form action="{{ url_for('compute_custom_labels') }}" method="post">
-        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
-    </form>
 
     <h1>Data Imputation</h1>
     <form action="{{ url_for('imputation') }}" method="post">
