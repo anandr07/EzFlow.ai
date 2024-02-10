@@ -12,10 +12,6 @@ from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling
 from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value
 
-# import os
-# import tempfile
-
-
 # Here the data is being declared globally
 data=None
 modified_data = None
@@ -40,11 +36,6 @@ def upload_file():
         return redirect(url_for('index'))
 
     if file:
-        # temp_dir = tempfile.gettempdir()
-        # temp_file_path = os.path.join(temp_dir, file.filename)
-        # print(f"Saving file to: {temp_file_path}") 
-        # file.save(temp_file_path)
-        # session['uploaded_file_path'] = temp_file_path
         data=pd.read_csv(file) # Here the csv file being transformed into a data frame for further usage
         data_head = process_uploaded_file(data)
         print(data_head)
@@ -59,21 +50,6 @@ def upload_file():
 
 
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
-# @app.route('/invoke_column_type_method', methods=['POST'])
-# def invoke_column_type_method():
-#     selected_method = request.form.get('column_type_method')
-
-#     if selected_method == 'manual':
-#         # Redirect to the manual column type selection method
-#         return redirect(url_for('column_type_selection'))
-#     elif selected_method == 'automatic':
-#         # Call the automatic column type computation method directly
-#         return redirect(url_for('compute_custom_labels'))
-#     else:
-#         # Handle other cases or show an error
-#         return render_template('index.html', error_message="Invalid method selected.")
-
-
 
 # Route to handle column type selection
 @app.route('/column_type_selection', methods=['POST'])
