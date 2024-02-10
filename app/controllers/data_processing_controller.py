@@ -78,17 +78,9 @@ def upload_file():
 # Route to handle column type selection
 @app.route('/column_type_selection', methods=['POST'])
 def column_type_selection():
-    print("aa gaye")
-    # global data
+    global selected_column_types
     try:
-        # data_head_local = data.head(3)
-        print("Hello")
         col_names = modified_data.columns.tolist()
-        print("Hello2")
-        # print("data head ke baad", data_head)
-        # col_names = data_head.columns.tolist()
-        # print("colnames ke baad", col_names)
-        # col_names = data_head.columns.tolist()
         if request.method == 'POST':
             selected_column_types = {}
             print("Hello")
@@ -98,15 +90,10 @@ def column_type_selection():
             print("Selected Column Types:", selected_column_types)
 
             return render_template('index.html', col_names=col_names)
-            # return {'message':'API success'}
         return render_template('index.html', col_names=col_names)
-        # return {'message':'API success'}
       
     except Exception as e:
-        # print("nhi hua")
         return render_template('index.html', error_message=f"An error occurred: {e}")
-        # return {'message':'API error'}
-
 
 @app.route('/compute_custom_labels', methods=['POST'])
 def compute_custom_labels():
@@ -128,12 +115,7 @@ def dropping_rows_missing_values():
     dropping_rows_attempted=True
     try:
         df, features_na_values_perc = dropping_rows_with_missing_value(data) #df and features with na are returned
-        # print(features_na_values_perc)
-        # df = datarows_missing_values[0]
-        # features_na_values_perc = datarows_missing_values[1]
-
         return render_template('index.html', dropping_rows_attempted=dropping_rows_attempted, features_na_values_perc = features_na_values_perc) # Here the  data after dropping the rows is outputted in the webpage
-
     except Exception as e:
         return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted=dropping_rows_attempted)
 
@@ -181,7 +163,6 @@ def confirm_drop():
         if confirm == 'Yes':
             
             modified_data = drop_selected_columns(data, columns_to_drop)
-            print(modified_data)
             data_head = process_uploaded_file(modified_data)
 
             if data_head is not None:
