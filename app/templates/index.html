@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Upload</title>
+    <title>Ezflow.ai</title>
+    <!-- Bootstrap CSS library -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script>
+        function toggleDropdown() {
+            var dropColumnsValue = document.getElementById("drop_columns").value;
+            var columnDropdown = document.getElementById("columnDropdown");
+
+            if (dropColumnsValue == "yes") {
+                columnDropdown.style.display = "block";
+            } else {
+                columnDropdown.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>CSV Upload</h1>
+    <h1>Ezflow.ai</h1>
+    <h3>EzFlow.ai, your go-to platform for effortlessly turning raw tabular data into powerful machine learning models! EzFlow.ai is an intuitive and user-friendly software product designed to democratize machine learning, making it accessible to everyone, regardless of their expertise.</h3>
     <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
         <input type="file" name="file" accept=".csv" required>
         <label for="x_rows">Display x rows:</label>
@@ -26,6 +42,114 @@
             {% endif %}
         {% endif %}
     {% endif %}
+
+    <div class='table table-sm' style="width: 100%;">
+        <!-- Dropdown for selecting columns to drop -->
+        <form action="{{ url_for('drop_columns') }}" method="post">
+            <label for="drop_columns">Do you want to drop columns?</label>
+            <select id="drop_columns" name="drop_columns" onchange="toggleDropdown()">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <!-- Dropdown for selecting columns to drop -->
+            <div id="columnDropdown" style="display: none;">
+                <label for="columns_to_drop">Which columns do you want to drop?</label>
+                <select id="columns_to_drop" name="columns_to_drop" multiple>
+                    {% for item in col_name %}
+                        <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="confirm_drop" value="Yes" class="btn btn-danger">Drop Columns</button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <h2>Column Type Selection</h2>
+    <form action="{{ url_for('column_type_selection') }}" method="post">
+        <button type="submit" class="btn btn-primary">Manual</button>
+    </form>
+    <!-- <h2>Compute Custom Labels</h2> -->
+    <form action="{{ url_for('compute_custom_labels') }}" method="post">
+        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
+    </form>
+
+        
+    <h1>Column Type Selection</h1>
+    <!-- <p>Inside the method.</p> -->
+    <form action="{{ url_for('column_type_selection') }}" method="post">
+        <!-- <p>After form.</p> -->
+        {% if col_names %}
+            <p>col names avail</p>
+            <ul>
+                {% for column in col_names %}
+                    <li>
+                        <label>{{ column }}:</label>
+                        <input type="radio" id="{{ column }}_continuous" name="{{ column }}" value="Continuous" checked> Continuous
+                        <input type="radio" id="{{ column }}_categorical" name="{{ column }}" value="Categorical"> Categorical
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="btn btn-primary">Submit Column Types</button>
+            <form action ="{{ url_for('imputation') }}" method="post"></form>
+        {% else %}
+            <!-- <p>No column names available.</p> -->
+        {% endif %}
+    </form>
+
+
+    <!-- Dropping Rows Section -->
+    <h1>Dropping Rows with Missing Values</h1>
+    <form action="{{ url_for('dropping_rows_missing_values') }}" method="post">
+        <input type="hidden" name="data" value="{{ df }}">
+        <button type="submit" class="btn btn-primary">Dropping Rows with Missing Values</button>
+    </form>
+
+    {% if dropping_rows_attempted %}
+        {% if features_na_values_perc %}
+            <h2>Values Dropped</h2>
+            {{ features_na_values_perc | safe }}
+        {% else %}
+            <p>No rows dropped</p>
+        {% endif %}
+    {% endif %}
+
     
+
+
+    <h1>Data Imputation</h1>
+    <form action="{{ url_for('imputation') }}" method="post">
+        <input type="hidden" name="data" value="{{ imputed_data_df }}">
+        <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
+    </form>
+    
+    <!-- {% if imputation_attempted %}
+        {% if data_impute %}
+            <h2>Head of the Dataset</h2>
+            {{ data_impute | safe }}
+        {% else %}
+            <p>No data available or imputation not yet performed.</p>
+        {% endif %}
+    {% endif %} -->
+
+    {% if Custom_labelling %}
+        <h2>Custom Labels</h2>
+        <table border="1">
+            <tr>
+                <th>Column Name</th>
+                <th>Custom Label</th>
+            </tr>
+            {% for col, label in custom_labels.items() %}
+                <tr>
+                    <td>{{ col }}</td>
+                    <td>{{ label }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <!-- <p>No custom labels available.</p> -->
+    {% endif %}
 </body>
 </html>
