@@ -95,7 +95,7 @@
             <button type="submit" class="btn btn-primary">Submit Column Types</button>
             <form action ="{{ url_for('imputation') }}" method="post"></form>
         {% else %}
-            <p>No column names available.</p>
+            <!-- <p>No column names available.</p> -->
         {% endif %}
     </form>
 
@@ -125,14 +125,14 @@
         <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
     </form>
     
-    {% if imputation_attempted %}
+    <!-- {% if imputation_attempted %}
         {% if data_impute %}
             <h2>Head of the Dataset</h2>
             {{ data_impute | safe }}
         {% else %}
             <p>No data available or imputation not yet performed.</p>
         {% endif %}
-    {% endif %}
+    {% endif %} -->
 
     {% if Custom_labelling %}
         <h2>Custom Labels</h2>
@@ -149,7 +149,7 @@
             {% endfor %}
         </table>
     {% else %}
-        <p>No custom labels available.</p>
+        <!-- <p>No custom labels available.</p> -->
     {% endif %}
 </body>
 </html>
