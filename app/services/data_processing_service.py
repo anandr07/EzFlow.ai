@@ -79,6 +79,7 @@ def dropping_rows_with_missing_value(file):
 
 def perform_imputation(file):
     try:
+        print(custom_col_labels)
         df=file
         for col in df.columns:
             if df[col].dtype == 'float64' or df[col].dtype == 'int64':
