@@ -5,11 +5,11 @@
 If a new change is made make sure it doesn't affect the earlier codes.
 '''
 
-# from flask import render_template, request, jsonify
-# from app import db, create_app
+from flask import render_template
+from app import app
 
-# app = create_app()
+@app.route('/data-visualization')
+def data_visualization():
+    return render_template('data_visualization.html')
 
-# @app.route('/data_visualization')
-# def data_visualization():
-#     return render_template('data_visualization.html')
+
