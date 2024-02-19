@@ -24,7 +24,7 @@ Release 1.0  - Main Merge
 3. Data Visualization: 
 	3.1 Univariate Analysis
 	3.1.1 Numerical Columns - Histogram, Line Plot, Density Plot, Box Plot, Voilion Plot. - Anand and Shanun 
-	3.1.2 Categorical Columns - Bar Plot - Richik & Gaurab 
+	3.1.2 Categorical Columns - Bar Plot -  Saurav
 	3.2 Multivariate Analysis
-	3.2.1 Continous - Continous - Scatter Plot, - Shreya 
+	3.2.1 Continous - Continous - Scatter Plot, - Shreya , Richik & Gaurab
 	3.2.2 Continous - Categorical - Histogram, Line Plot, Density Plot, Box Plot with Hue. - Amit and Saniya
