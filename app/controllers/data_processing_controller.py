@@ -16,6 +16,11 @@ from app.services.data_processing_service import perform_imputation, dropping_ro
 cleaned_data=None
 raw_data=None
 
+
+@app.route('/homepage')
+def homepage():
+    return render_template('homepage.html')
+
 @app.route('/')
 def index():
     return render_template('index.html', data_head=None,data_impute=None,imputation_attempted=False)  # Pass data_head and data_impute as None initially The imputation_attempted should be False as we dont want to display any thing from the data_imputation button if its not clicked
