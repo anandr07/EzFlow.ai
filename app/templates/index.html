@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body style="background-color: #f0f8ff;"> <!-- Light blue background -->
+<body style="background-color:  #9acffd;"> <!-- Light blue background -->
     <div class="container">
         <h1>Ezflow.ai</h1>
         <p>Machine Learning Made Easy</p>
@@ -76,9 +76,31 @@
             </div>
         </form>
 
+        
+
         <h2 class="text-left">Column Type Selection</h2>
         <form action="{{ url_for('column_type_selection') }}" method="post">
             <button type="submit" class="btn btn-primary">Manual</button>
+        </form>
+
+        <!-- <p>Inside the method.</p> -->
+        <form action="{{ url_for('column_type_selection') }}" method="post">
+            <!-- <p>After form.</p> -->
+            {% if col_names %}
+                <ul>
+                    {% for column in col_names %}
+                        <li>
+                            <label>{{ column }}:</label>
+                            <input type="radio" id="{{ column }}_continuous" name="{{ column }}" value="Continuous" checked> Continuous
+                            <input type="radio" id="{{ column }}_categorical" name="{{ column }}" value="Categorical"> Categorical
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" class="btn btn-primary">Submit Column Types</button>
+                <form action ="{{ url_for('imputation') }}" method="post"></form>
+            {% else %}
+                <!-- <p>No column names available.</p> -->
+            {% endif %}
         </form>
 
         <form action="{{ url_for('compute_custom_labels') }}" method="post">
@@ -146,5 +168,10 @@
             tableScroll.scrollTop += 50; // Adjust scroll amount as needed
         }
     </script>
+
+    <div class="text-center">
+        <a href="{{ url_for('data_visualization') }}" class="btn btn-primary">Proceed to Data Visualization</a>
+    </div>
+
 </body>
 </html>

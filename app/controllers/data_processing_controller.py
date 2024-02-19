@@ -16,7 +16,6 @@ from app.services.data_processing_service import perform_imputation, dropping_ro
 cleaned_data=None
 raw_data=None
 
-
 @app.route('/homepage')
 def homepage():
     return render_template('homepage.html')
@@ -62,15 +61,12 @@ def column_type_selection():
     global selected_column_types,cleaned_data
     data_head = process_uploaded_file(cleaned_data)
     try:
-        print(1)
         col_names = cleaned_data.columns.tolist()
-        print(1)
         if request.method == 'POST' :
-            print(1)
             selected_column_types = {}
             for column in col_names:
                 selected_column_types[column] = request.form.get(column)
-
+            
             print("Selected Column Types:", selected_column_types)
             if request.form.to_dict():
                 print(selected_column_types)
