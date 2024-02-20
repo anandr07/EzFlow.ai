@@ -9,8 +9,7 @@ import pandas as pd
 from flask import request
 import numpy as np
 
-user_labeled_col = {} 
-custom_col_labels ={}
+col_labels ={}
 
 def process_uploaded_file(file):
     try:
@@ -33,25 +32,25 @@ def process_uploaded_file(file):
 ## DONOT CHANGE THIS FILE 
 
 def col_labelling(cleaned_data):
-    global custom_col_labels
-    custom_col_labels = {}
+    global col_labels
+    col_labels = {}
 
     for col in cleaned_data.columns:
         if cleaned_data[col].dtype == 'object':
-            custom_col_labels[col] = 'categorical'
+            col_labels[col] = 'categorical'
         else:
             unique_values_ratio = len(cleaned_data) / cleaned_data[col].nunique()
             if unique_values_ratio > 11:
-                custom_col_labels[col] = 'categorical'
+                col_labels[col] = 'categorical'
             else:
-                custom_col_labels[col] = 'continuous'
-    return custom_col_labels
+                col_labels[col] = 'continuous'
+    return col_labels
 
 def manual_col_labelling(col_names, form):
-    global custom_col_labels
+    global col_labels
     for column in col_names:
-        custom_col_labels[column] = form.get(column)
-    return custom_col_labels
+        col_labels[column] = form.get(column)
+    return col_labels
 
 def dropping_rows_with_missing_value(file):
     try:
@@ -85,7 +84,7 @@ def dropping_rows_with_missing_value(file):
 
 def perform_imputation(file):
     try:
-        print(custom_col_labels)
+        print(col_labels)
         df=file
         for col in df.columns:
             if df[col].dtype == 'float64' or df[col].dtype == 'int64':

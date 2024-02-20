@@ -21,16 +21,16 @@ from app.services import data_processing_service
 
 @app.route('/data-visualization')
 def data_visualization():
-    global custom_col_labels
-    custom_col_labels = data_processing_service.custom_col_labels
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels)
+    global col_labels
+    col_labels = data_processing_service.col_labels
+    return render_template('data_visualization.html', col_labels=col_labels)
 
 @app.route('/get-histogram', methods=['POST'])
 def get_histogram():
     selected_column = request.form['column']
     # Logic to generate histogram for the selected_column
     histogram_image = generate_histogram(selected_column)  # Call the function to generate histogram image
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, histogram_image=histogram_image)
+    return render_template('data_visualization.html', col_labels=col_labels, histogram_image=histogram_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -39,7 +39,7 @@ def get_violine():
     selected_column = request.form['column']
     # Logic to generate histogram for the selected_column
     violine_image = generate_violineplot(selected_column)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, violine_image=violine_image)
+    return render_template('data_visualization.html', col_labels=col_labels, violine_image=violine_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -49,7 +49,7 @@ def get_boxplot():
     selected_column = request.form['column']
     # Logic to generate boxplot for the selected_column
     boxplot_image = generate_boxplot(selected_column)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, boxplot_image=boxplot_image)
+    return render_template('data_visualization.html', col_labels=col_labels, boxplot_image=boxplot_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -59,7 +59,7 @@ def get_density():
     selected_column = request.form['column']
     # Logic to generate boxplot for the selected_column
     density_image = generate_density(selected_column)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, density_image=density_image)
+    return render_template('data_visualization.html', col_labels=col_labels, density_image=density_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -69,7 +69,7 @@ def get_scatterplot():
     y_column = request.form['y_column']
     # Logic to generate scatterplot for the x_column and y_column
     scatterplot_image = generate_scatterplot(x_column, y_column)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, scatterplot_image=scatterplot_image)
+    return render_template('data_visualization.html', col_labels=col_labels, scatterplot_image=scatterplot_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -80,7 +80,7 @@ def get_barplot():
     agg_type = request.form['agg_type']
     # Logic to generate barplot for the selected_column
     barplot_image = generate_barplot(x_column, y_column, agg_type)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, barplot_image=barplot_image)
+    return render_template('data_visualization.html', col_labels=col_labels, barplot_image=barplot_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -89,15 +89,15 @@ def get_piechart():
     selected_column = request.form['column']
     # Logic to generate piechart for the selected_column
     piechart_image = generate_piechart(selected_column)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, piechart_image=piechart_image)
+    return render_template('data_visualization.html', col_labels=col_labels, piechart_image=piechart_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
 @app.route('/get-corr-heatmap', methods=['POST'])
 def get_corr_heatmap():
-    continue_label = [i for i in custom_col_labels if custom_col_labels[i] == 'continuous']
+    continue_label = [i for i in col_labels if col_labels[i] == 'continuous']
     heatmap_image = generate_corr_heatmap(continue_label)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, heatmap_image=heatmap_image)
+    return render_template('data_visualization.html', col_labels=col_labels, heatmap_image=heatmap_image)
 
 # *****************************************************************************************TBU************************************************************************** #
 
@@ -108,4 +108,4 @@ def get_linechart():
     agg_type = request.form['agg_type']
     # Logic to generate line chart for the x_column and y_column
     linechart_image = generate_line_chart(x_column, y_column, agg_type)
-    return render_template('data_visualization.html', custom_col_labels=custom_col_labels, linechart_image=linechart_image)
+    return render_template('data_visualization.html', col_labels=col_labels, linechart_image=linechart_image)

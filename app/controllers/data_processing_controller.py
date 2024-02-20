@@ -58,20 +58,20 @@ def upload_file():
 # Route to handle column type selection
 @app.route('/column_type_selection', methods=['POST'])
 def column_type_selection():
-    global custom_col_labels,cleaned_data
+    global col_labels,cleaned_data
     data_head = process_uploaded_file(cleaned_data)
     try:
         col_names = cleaned_data.columns.tolist()
         if request.method == 'POST' :
-            custom_col_labels = manual_col_labelling(col_names, request.form)            
-            print("Selected Column Types:", custom_col_labels)
+            col_labels = manual_col_labelling(col_names, request.form)            
+            print("Selected Column Types:", col_labels)
             if request.form.to_dict():
-                print(custom_col_labels)
-                cleaned_data = correct_category_dtype(cleaned_data, custom_col_labels)
+                print(col_labels)
+                cleaned_data = correct_category_dtype(cleaned_data, col_labels)
                 data_head = process_uploaded_file(cleaned_data)
-                return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=custom_col_labels)
-            return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=custom_col_labels)
-        return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=custom_col_labels)
+                return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=col_labels)
+            return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=col_labels)
+        return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=col_labels)
       
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred: {e}")
@@ -79,15 +79,15 @@ def column_type_selection():
 @app.route('/compute_custom_labels', methods=['POST'])
 def compute_custom_labels():
     global cleaned_data
-    global custom_col_labels
+    global col_labels
     Custom_labelling = True
 
     try:
-        custom_col_labels = col_labelling(cleaned_data)
-        print(f"Custom Column Labels: {custom_col_labels}")
-        cleaned_data = correct_category_dtype(cleaned_data, custom_col_labels)
+        col_labels = col_labelling(cleaned_data)
+        print(f"Custom Column Labels: {col_labels}")
+        cleaned_data = correct_category_dtype(cleaned_data, col_labels)
         data_head = process_uploaded_file(cleaned_data)
-        return render_template('index.html',data_head=data_head.to_html(), custom_labels=custom_col_labels, Custom_labelling=Custom_labelling)
+        return render_template('index.html',data_head=data_head.to_html(), custom_labels=col_labels, Custom_labelling=Custom_labelling)
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during custom label computation: {e}", Custom_labelling=Custom_labelling)

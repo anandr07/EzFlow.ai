@@ -57,7 +57,7 @@
         <form method="post">
             <label for="column">Choose a continuous column:</label>
             <select id="column" name="column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
+                {% for column, label in col_labels.items() %}
                     {% if label == "continuous" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
@@ -97,7 +97,7 @@
         <form action="{{ url_for('get_scatterplot') }}" method="post">
             <label for="x_column">Choose a continuous column for the x-axis:</label>
             <select id="x_column" name="x_column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
+                {% for column, label in col_labels.items() %}
                     {% if label == "continuous" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
@@ -105,7 +105,7 @@
             </select>
             <label for="y_column">Choose a continuous column for the y-axis:</label>
             <select id="y_column" name="y_column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
+                {% for column, label in col_labels.items() %}
                     {% if label == "continuous" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
@@ -125,7 +125,7 @@
         <form method="post">
             <label for="x_column">Choose a categorical column for the x-axis:</label>
             <select id="x_column" name="x_column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
+                {% for column, label in col_labels.items() %}
                     {% if label == "categorical" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
@@ -133,7 +133,7 @@
             </select>
             <label for="y_column">Choose a continuous column for the y-axis:</label>
             <select id="y_column" name="y_column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
+                {% for column, label in col_labels.items() %}
                     {% if label == "continuous" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
@@ -167,7 +167,7 @@
         <form action="{{ url_for('get_piechart') }}" method="post">
             <label for="column">Choose a categorical column:</label>
             <select id="column" name="column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
+                {% for column, label in col_labels.items() %}
                     {% if label == "categorical" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
