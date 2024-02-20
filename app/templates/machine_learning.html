@@ -1,3 +1,5 @@
+<!-- machine_learning.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,9 +34,22 @@
             </select>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <!-- Add your data visualization components here -->
+        <!-- Display numerical or categorical variables based on problem type -->
         {% if problem_type %}
-            <p>Selected problem type: {{ problem_type }}</p>
+            <h2>Selected problem type: {{ problem_type }}</h2>
+            <h3>Available Variables:</h3>
+            <form action="/variable-selection" method="post">
+                {% for variable in variables %}
+                    <input type="radio" id="{{ variable }}" name="column" value="{{ variable }}">
+                    <label for="{{ variable }}">{{ variable }}</label><br>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        {% endif %}
+        <!-- Display selected variable after form submission -->
+        {% if selected_variable %}
+            <h3>Selected Variable:</h3>
+            <p>{{ selected_variable }}</p>
         {% endif %}
     </div>
 </body>

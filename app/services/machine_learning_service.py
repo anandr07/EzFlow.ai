@@ -19,13 +19,10 @@ from sklearn.metrics import (
     precision_score, recall_score, confusion_matrix, ConfusionMatrixDisplay
 )
 from sklearn.preprocessing import StandardScaler
-
+from app.services import data_processing_service    
 
 def get_variables_by_type(problem_type):
-    # Assume custom_col_labels is a dictionary where the key represents the column name
-    # and the value represents whether numerical or categorical
-    custom_col_labels = {'age': 'numerical', 'gender': 'categorical', 'income': 'numerical', 'education': 'categorical'}
-    
+    custom_col_labels = data_processing_service.custom_col_labels
     if problem_type == 'regression':
         return [var for var, var_type in custom_col_labels.items() if var_type == 'numerical']
     elif problem_type == 'classification':
