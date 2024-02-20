@@ -23,16 +23,17 @@ Release 1.0  - Main Merge
 
 3. Data Visualization: - Amit 
 	3.1 Univariate Analysis
-	3.1.1 Numerical Columns - Histogram, Line Plot, Density Plot, Box Plot, Voilion Plot. - Anand and Shanun 
-	3.1.2 Categorical Columns - Bar Plot -  Saurav
+	3.1.1 Numerical Columns - Histogram, Line Plot, Density Plot, Box Plot, Voilion Plot. 
+	3.1.2 Categorical Columns - Bar Plot 
 	3.2 Multivariate Analysis
-	3.2.1 Continous - Continous - Scatter Plot, - Shreya , Richik & Gaurab
-	3.2.2 Continous - Categorical - Histogram, Line Plot, Density Plot, Box Plot with Hue. - Amit and Saniya
+	3.2.1 Continous - Continous - Scatter Plot
+	3.2.2 Continous - Categorical - Histogram, Line Plot, Density Plot, Box Plot with Hue.
 
 4. Data Modelling: Anand 
 	4.1 Problem - Classification/Regression
 	4.1 Output Column - Continous if Regression or Categorical if Classification
 	4.3 Ask user for Label Encoding or One Hot Encoding for categorical variables
-	4.4 Model Selection - Without HyperParameter Tuning 
+	4.4 Model Selection - Without HyperParameter Tuning - KNN, Logistic Regression, NB, SVM, DT, RF, XGB. 
 	4.5 Train Test Split Percentage
 	4.6 Results - Table 
+	4.7 Plot Results
