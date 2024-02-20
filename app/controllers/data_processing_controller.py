@@ -111,13 +111,31 @@ def dropping_rows_missing_values():
         return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted=dropping_rows_attempted)
 
 
+# @app.route('/data_impuation', methods=['POST'])
+# def imputation():
+#     global cleaned_data #Here the data is being called from the global scope
+#     imputation_attempted = True 
+
+#     try:
+#         imputed_data_df = perform_imputation(cleaned_data)
+#         print(f"Imputed Data: \n{imputed_data_df.head()}")
+
+#         # Render the result
+#         return render_template('index.html', data_head=imputed_data_df.to_html(), imputation_attempted=imputation_attempted) # Here the imputed data is outputted in the webpage
+
+#     except Exception as e:
+#         return render_template('index.html', error_message=f"An error occurred during imputation: {e}", imputation_attempted=imputation_attempted)
+    
+    
 @app.route('/data_impuation', methods=['POST'])
 def imputation():
     global cleaned_data #Here the data is being called from the global scope
     imputation_attempted = True 
 
     try:
-        imputed_data_df = perform_imputation(cleaned_data)
+        strategy = request.form.get('strategy')
+
+        imputed_data_df = perform_imputation(cleaned_data, strategy=strategy)
         print(f"Imputed Data: \n{imputed_data_df.head()}")
 
         # Render the result
@@ -125,7 +143,6 @@ def imputation():
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during imputation: {e}", imputation_attempted=imputation_attempted)
-    
 
 @app.route('/drop_columns', methods=['POST'])
 def drop_columns():

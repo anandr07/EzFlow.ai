@@ -144,12 +144,21 @@
             {% endif %}
         {% endif %}
 
-        <h2 class="text-left">Data Imputation</h2>
-        <form action="{{ url_for('imputation') }}" method="post">
-            <input type="hidden" name="data" value="{{ imputed_data_df }}">
-            <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
+        <h2 class="text-left">Select Imputation Strategy</h2>
+        <form action="/data_impuation" method="post">
+            <label for="strategy">Select Imputation Strategy:</label>
+            <select name="strategy" id="strategy">
+                <option value="mean">Mean</option>
+                <option value="median">Median</option>
+                <option value="mode">Mode</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Impute Data">
         </form>
     </div>
+
+
+       
 
     <script>
         function toggleDropdown() {

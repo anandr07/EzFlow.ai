@@ -95,19 +95,42 @@ def dropping_rows_with_missing_value(file):
         return None
 
 
-def perform_imputation(file):
-    try:
-        print(custom_col_labels)
-        df=file
-        for col in df.columns:
-            if df[col].dtype == 'float64' or df[col].dtype == 'int64':
-                df[col].fillna(df[col].mean(), inplace=True)
-            else:
-                df[col].fillna('Missing', inplace=True)
-        return df.head()
-    except Exception as e:
-        print(f"No file {e}")
-        return None
+# def perform_imputation(file):
+#     try:
+#         print(custom_col_labels)
+#         df=file
+#         for col in df.columns:
+#             if df[col].dtype == 'float64' or df[col].dtype == 'int64':
+#                 df[col].fillna(df[col].mean(), inplace=True)
+#             else:
+#                 df[col].fillna('Missing', inplace=True)
+#         return df.head()
+#     except Exception as e:
+#         print(f"No file {e}")
+#         return None
+
+
+
+def perform_imputation(file, strategy):
+    df=file
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    categorical_cols = df.select_dtypes(exclude = ['float64', 'int64']).columns
+    
+    if strategy == 'mean':
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+    elif strategy == 'median':
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
+    elif strategy == 'mode':
+        for col in categorical_cols:
+            mode_val = df[col].mode()[0]
+            df[col] = df[col].fillna(mode_val)
+    else:
+        raise ValueError('Invalid strategy selected')
+    print('nan for cat')
+    a = df[categorical_cols].isnull().sum().sum()
+    print(a)
+    return df.head()
+
     
 
 def drop_selected_columns(df, columns_to_drop):
