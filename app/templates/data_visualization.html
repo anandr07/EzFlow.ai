@@ -18,6 +18,7 @@
             margin-top: 20px;
         }
     </style>
+    
 </head>
 <body style="background-color: #f0f8ff;"> <!-- Light blue background -->
     <div class="container">
@@ -26,22 +27,151 @@
         
         <h1 id="data-visualization">Data Visualization</h1>
 
-        <form action="{{ url_for('get_histogram') }}" method="post">
+        <form method="post">
             <label for="column">Choose a continuous column:</label>
             <select id="column" name="column" class="form-control">
-                {% for column, label in custom_col_labels.items() %}
-                    {% if label == "numerical" %}
+                {% for column, label in col_labels.items() %}
+                    {% if label == "continuous" %}
                         <option value="{{ column }}">{{ column }}</option>
                     {% endif %}
                 {% endfor %}
             </select>
-            <button type="submit" class="btn btn-primary mt-3">Get Histogram</button>
+            <button type="submit" onclick="this.form.action='{{url_for('get_histogram') }}'" class="btn btn-primary mt-3">Get Histogram</button>
+            <button type="submit" onclick="this.form.action='{{url_for('get_boxplot') }}'" class="btn btn-primary mt-3">Get Boxplot</button>
+            <button type="submit" onclick="this.form.action='{{url_for('get_violine') }}'" class="btn btn-primary mt-3">Get Violine</button>
+            <button type="submit" onclick="this.form.action='{{url_for('get_density') }}'" class="btn btn-primary mt-3">Get Density</button>
+        </form>
+        {% if violine_image %}
+            <div class="histogram-container">
+                <h2>Generated Boxplot</h2>
+                <img src="data:image/png;base64,{{ violine_image }}" alt="Boxplot" class="img-fluid">
+            </div>
+        {% endif %}
+        {% if boxplot_image %}
+            <div class="histogram-container">
+                <h2>Generated Boxplot</h2>
+                <img src="data:image/png;base64,{{ boxplot_image }}" alt="Boxplot" class="img-fluid">
+            </div>
+        {% endif %}
+        {% if histogram_image %}
+        <div class="histogram-container">
+            <h2>Generated Histogram</h2>
+            <img src="data:image/png;base64,{{ histogram_image }}" alt="Histogram" class="img-fluid">
+        </div>
+        {% endif %}
+        {% if density_image %}
+            <div class="histogram-container">
+                <h2>Generated Boxplot</h2>
+                <img src="data:image/png;base64,{{ density_image }}" alt="Boxplot" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        <form action="{{ url_for('get_scatterplot') }}" method="post">
+            <label for="x_column">Choose a continuous column for the x-axis:</label>
+            <select id="x_column" name="x_column" class="form-control">
+                {% for column, label in col_labels.items() %}
+                    {% if label == "continuous" %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <label for="y_column">Choose a continuous column for the y-axis:</label>
+            <select id="y_column" name="y_column" class="form-control">
+                {% for column, label in col_labels.items() %}
+                    {% if label == "continuous" %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary mt-3">Get Scatterplot</button>
         </form>
 
-        {% if histogram_image %}
+        {% if scatterplot_image %}
             <div class="histogram-container">
-                <h2>Generated Histogram</h2>
-                <img src="data:image/png;base64,{{ histogram_image }}" alt="Histogram" class="img-fluid">
+                <h2>Generated Scatterplot</h2>
+                <img src="data:image/png;base64,{{ scatterplot_image }}" alt="Scatterplot" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        <form method="post">
+            <label for="x_column">Choose a categorical column for the x-axis:</label>
+            <select id="x_column" name="x_column" class="form-control">
+                {% for column, label in col_labels.items() %}
+                    {% if label == "categorical" %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <label for="y_column">Choose a continuous column for the y-axis:</label>
+            <select id="y_column" name="y_column" class="form-control">
+                {% for column, label in col_labels.items() %}
+                    {% if label == "continuous" %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <label for="agg_type">Choose Aggregation type for y-axis:</label>
+            <select id="agg_type" name="agg_type" class="form-control">
+                {% for column in ['mean', 'count', 'sum'] %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" onclick="this.form.action='{{url_for('get_barplot') }}'" class="btn btn-primary mt-3">Get Barplot</button>
+            <button type="submit" onclick="this.form.action='{{url_for('get_linechart') }}'" class="btn btn-primary mt-3">Get Lineplot</button>
+        </form>
+
+        {% if barplot_image %}
+            <div class="histogram-container">
+                <h2>Generated Barplot</h2>
+                <img src="data:image/png;base64,{{ barplot_image }}" alt="Barplot" class="img-fluid">
+            </div>
+        {% endif %}
+        {% if linechart_image %}
+            <div class="histogram-container">
+                <h2>Generated Linechart</h2>
+                <img src="data:image/png;base64,{{ linechart_image }}" alt="Linechart" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <form action="{{ url_for('get_piechart') }}" method="post">
+            <label for="column">Choose a categorical column:</label>
+            <select id="column" name="column" class="form-control">
+                {% for column, label in col_labels.items() %}
+                    {% if label == "categorical" %}
+                        <option value="{{ column }}">{{ column }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary mt-3">Get Piechart</button>
+        </form>
+
+        {% if piechart_image %}
+            <div class="histogram-container">
+                <h2>Generated Piechart</h2>
+                <img src="data:image/png;base64,{{ piechart_image }}" alt="Piechart" class="img-fluid">
+            </div>
+        {% endif %}
+    </div>
+    <div class="container">
+        <form action="{{ url_for('get_corr_heatmap') }}" method="post">
+            <label for="column">Plot a Heat map of correlation between cntinuous columns</label>
+            <br>
+            <button type="submit" class="btn btn-primary mt-3">Get Heatmap</button>
+        </form>
+        {% if heatmap_image %}
+            <div class="histogram-container">
+                <h2>Generated Heatmap</h2>
+                <img src="data:image/png;base64,{{ heatmap_image }}" alt="Heatmap" class="img-fluid">
+            </div>
+        {% endif %}
+        {% if density_image %}
+            <div class="histogram-container">
+                <h2>Generated Boxplot</h2>
+                <img src="data:image/png;base64,{{ density_image }}" alt="Boxplot" class="img-fluid">
             </div>
         {% endif %}
     </div>

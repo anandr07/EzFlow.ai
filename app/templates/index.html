@@ -91,8 +91,8 @@
                     {% for column in col_names %}
                         <li>
                             <label>{{ column }}:</label>
-                            <input type="radio" id="{{ column }}_continuous" name="{{ column }}" value="Continuous" checked> Continuous
-                            <input type="radio" id="{{ column }}_categorical" name="{{ column }}" value="Categorical"> Categorical
+                            <input type="radio" id="{{ column }}_continuous" name="{{ column }}" value="continuous" checked> Continuous
+                            <input type="radio" id="{{ column }}_categorical" name="{{ column }}" value="categorical"> Categorical
                         </li>
                     {% endfor %}
                 </ul>
