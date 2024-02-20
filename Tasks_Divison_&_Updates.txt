@@ -32,6 +32,7 @@ Release 1.0  - Main Merge
 4. Data Modelling: Anand 
 	4.1 Problem - Classification/Regression
 	4.1 Output Column - Continous if Regression or Categorical if Classification
-	4.3 Model Selection - Without HyperParameter Tuning 
-	4.4 Train Test Split Percentage
-	4.5 Results - Table 
+	4.3 Ask user for Label Encoding or One Hot Encoding for categorical variables
+	4.4 Model Selection - Without HyperParameter Tuning 
+	4.5 Train Test Split Percentage
+	4.6 Results - Table 
