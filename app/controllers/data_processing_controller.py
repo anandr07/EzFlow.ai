@@ -10,7 +10,7 @@ import pandas as pd
 from flask import render_template, request, redirect, url_for
 from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling,correct_category_dtype
-from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value
+from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value, manual_col_labelling
 
 # Here the data is being declared globally
 cleaned_data=None
@@ -58,23 +58,20 @@ def upload_file():
 # Route to handle column type selection
 @app.route('/column_type_selection', methods=['POST'])
 def column_type_selection():
-    global selected_column_types,cleaned_data
+    global custom_col_labels,cleaned_data
     data_head = process_uploaded_file(cleaned_data)
     try:
         col_names = cleaned_data.columns.tolist()
         if request.method == 'POST' :
-            selected_column_types = {}
-            for column in col_names:
-                selected_column_types[column] = request.form.get(column)
-            
-            print("Selected Column Types:", selected_column_types)
+            custom_col_labels = manual_col_labelling(col_names, request.form)            
+            print("Selected Column Types:", custom_col_labels)
             if request.form.to_dict():
-                print(selected_column_types)
-                cleaned_data = correct_category_dtype(cleaned_data, selected_column_types)
+                print(custom_col_labels)
+                cleaned_data = correct_category_dtype(cleaned_data, custom_col_labels)
                 data_head = process_uploaded_file(cleaned_data)
-                return render_template('index.html',data_head=data_head.to_html(), col_names=col_names)
-            return render_template('index.html',data_head=data_head.to_html(), col_names=col_names)
-        return render_template('index.html',data_head=data_head.to_html(), col_names=col_names)
+                return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=custom_col_labels)
+            return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=custom_col_labels)
+        return render_template('index.html',data_head=data_head.to_html(), col_names=col_names,custom_labels=custom_col_labels)
       
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred: {e}")

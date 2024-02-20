@@ -44,7 +44,13 @@ def col_labelling(cleaned_data):
             if unique_values_ratio > 11:
                 custom_col_labels[col] = 'categorical'
             else:
-                custom_col_labels[col] = 'numerical'
+                custom_col_labels[col] = 'continuous'
+    return custom_col_labels
+
+def manual_col_labelling(col_names, form):
+    global custom_col_labels
+    for column in col_names:
+        custom_col_labels[column] = form.get(column)
     return custom_col_labels
 
 def dropping_rows_with_missing_value(file):
@@ -105,7 +111,7 @@ def correct_category_dtype(df, col_labels):
     try:
         print(1)
         for col in col_labels:
-            if col_labels[col] == 'Continuous':
+            if col_labels[col] == 'continuous':
                 df[col] = pd.to_numeric(df[col], errors='coerce')
                 # median = df[col].median()
                 # df[col] = df[col].fillna(median)
