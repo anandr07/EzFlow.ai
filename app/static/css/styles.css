@@ -1,41 +1,38 @@
-/* 
 body {
     font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Light blue background */
+    color: #333; /* Dark text color */
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
 }
+
 .container {
-    max-width: 600px;
-    margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-label {
-    margin-bottom: 10px;
-}
-
-input {
+h1, h3 {
+    color: #007bff; /* Blue headings */
     margin-bottom: 20px;
+    text-align: center;
 }
 
-button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-align: center;
 }
 
-button:hover {
-    background-color: #0056b3;
-} */
+.btn-primary, .btn-info, .btn-danger {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.table-container {
+    margin-top: 30px;
+    max-height: 300px; /* Set max height for the container */
+    overflow-y: auto; /* Add vertical scrollbar when content exceeds max height */
+}

@@ -1,36 +1,35 @@
 #%%
-
+# app/services/data_visualization_service.py
 ''' Make sure to handle exceptions, and scale the code accordingly.
 If a new change is made make sure it doesn't affect the earlier codes.
 '''
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
-from app.models.database_models import ProcessedData
-
-def visualize_data():
-    processed_data = pd.read_sql(db.session.query(ProcessedData).statement, db.session.bind)
-    
-    # Add logic for data visualization - To Be Updated
-    # For example, a correlation matrix heatmap, scatter plot etc... To be Decided
-    plt.figure(figsize=(12, 10))
-    sns.heatmap(processed_data.corr(), annot=True, cmap='coolwarm', linewidths=0.5)
-    plt.title('Correlation Matrix Heatmap')
-    plt.show()
-    
-    return {'message': 'Data visualized successfully!'}
+import matplotlib
+matplotlib.use('agg') # DONOT REMOVE THIS
+import io
+import base64
+from app.controllers import data_processing_controller
 
 
-#  num_bins, density = 1,color ='green',alpha = 0.7
+def generate_histogram(column_name):
 
+    plt.figure(figsize=(10, 6))
+    plt.hist(data_processing_controller.raw_data[column_name], bins=20, color='skyblue', edgecolor='black')
+    plt.title('Histogram of ' + column_name)
+    plt.xlabel(column_name)
+    plt.ylabel('Frequency')
+    plt.grid(True)
+    plt.tight_layout()
 
-colors = ['green', 'blue', 'lime']
+    # Convert plot to PNG image
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
 
+    # Convert PNG image to base64 string
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return image_base64
 
-def hist_plot(df, bins, color):
-    colors = ['green', 'blue', 'lime']
-    col_names = df.columns
-    for i, e in enumerate(col_names):
-        plt.hist(df[i].values, bins, color=colors)
-        
