@@ -1,5 +1,3 @@
-<!-- homepage.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,10 +55,21 @@
         .btn-get-started:hover {
             background-color: #0056b3; /* Darker blue on hover */
         }
+
+        .option-table {
+            margin-top: 50px; /* Top margin for spacing */
+        }
+
+        .option-table th, .option-table td {
+            padding: 10px; /* Padding for table cells */
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Logo at the left top corner -->
+        <img src="{{ url_for('static', filename='img/Ezflow_Logo.jpg') }}" alt="Ezflow.ai Logo" style="width: 100px; height: 100px; position: absolute; top: 10px; left: 10px;">
+
         <h1>Welcome to Ezflow.ai</h1>
         <h3>Machine Learning Made Easy</h3>
         <p>Ezflow.ai is your go-to platform for effortlessly turning raw tabular data into powerful machine learning models. Our intuitive and user-friendly software empowers users with no coding experience to learn and implement machine learning projects. By automating data preprocessing, model training, and result visualization, Ezflow.ai provides predictions and comprehensive summary reports.</p>
@@ -69,6 +78,37 @@
         <form action="{{ url_for('index') }}" method="get">
             <button type="submit" class="btn btn-get-started">Get Started</button>
         </form>
+
+        <!-- Option table -->
+        <div class="option-table">
+            <h2>Available Options</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Data Processing</th>
+                        <th>Data Visualization</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Upload and display data</td>
+                        <td>Display histogram plot for continuous variables</td>
+                    </tr>
+                    <tr>
+                        <td>Column type selection</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Drop columns</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Data imputation</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

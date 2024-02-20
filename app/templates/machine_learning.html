@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Modelling</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        h1 {
+            font-size: 2em; 
+        }
+        h1#data-modelling {
+            font-size: 1.5em; 
+        }
+        .histogram-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body style="background-color: #f0f8ff;"> <!-- Light blue background -->
+    <div class="container">
+        <h1>Ezflow.ai</h1>
+        <p>Machine Learning Made Easy</p>
+        
+        <h1 id="data-modelling">Data Modelling</h1>
+        <form action="/machine-learning" method="post">
+            <label for="problem_type">Select Problem Type:</label>
+            <select id="problem_type" name="problem_type">
+                <option value="Regression">Regression</option>
+                <option value="Classification">Classification</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <!-- Add your data visualization components here -->
+        {% if problem_type %}
+            <p>Selected problem type: {{ problem_type }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

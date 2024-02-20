@@ -1,17 +1,21 @@
 #%%
 # ******************************************************************************TBU*******************************************************************#
+# app/controllers/machine_learning_controller.py
+
 
 ''' Make sure to handle exceptions, and scale the code accordingly.
 If a new change is made make sure it doesn't affect the earlier codes.
 '''
 
-# IMPORTANT : We will be using LazyRegressor (Semi-Automated ML Training Module) for Out Training purpose. 
+from app import app
+from flask import render_template, request, jsonify
 
-# from flask import render_template, request, jsonify
-# from app import db, create_app
+@app.route('/machine-learning', methods=['GET', 'POST'])
+def machine_learning():
+    if request.method == 'POST':
+        problem_type = request.form['problem_type'].lower()  # Get the problem type input and convert to lowercase
+        print(problem_type)
+        # Handle exceptions or additional logic as needed
+        return render_template('machine_learning.html', problem_type=problem_type)
+    return render_template('machine_learning.html')
 
-# app = create_app()
-
-# @app.route('/machine_learning')
-# def machine_learning():
-#     return render_template('machine_learning.html')

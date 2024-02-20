@@ -10,7 +10,7 @@ from flask import request
 import numpy as np
 
 user_labeled_col = {} 
-custom_col_labels ={}
+custom_col_labels = {}
 
 def process_uploaded_file(file):
     try:
