@@ -26,6 +26,9 @@ from sklearn.utils.multiclass import type_of_target
 
 
 from flask import request
+import numpy as np
+
+col_labels ={}
 
 def process_uploaded_file(file):
     try:
@@ -51,19 +54,25 @@ def process_uploaded_file(file):
 ## DONOT CHANGE THIS FILE 
 
 def col_labelling(cleaned_data):
-    global custom_col_labels
-    custom_col_labels = {}
+    global col_labels
+    col_labels = {}
 
     for col in cleaned_data.columns:
         if cleaned_data[col].dtype == 'object':
-            custom_col_labels[col] = 'categorical'
+            col_labels[col] = 'categorical'
         else:
             unique_values_ratio = len(cleaned_data) / cleaned_data[col].nunique()
             if unique_values_ratio > 11:
-                custom_col_labels[col] = 'categorical'
+                col_labels[col] = 'categorical'
             else:
-                custom_col_labels[col] = 'numerical'
-    return custom_col_labels
+                col_labels[col] = 'continuous'
+    return col_labels
+
+def manual_col_labelling(col_names, form):
+    global col_labels
+    for column in col_names:
+        col_labels[column] = form.get(column)
+    return col_labels
 
 def dropping_rows_with_missing_value(file):
     try:
@@ -95,42 +104,19 @@ def dropping_rows_with_missing_value(file):
         return None
 
 
-# def perform_imputation(file):
-#     try:
-#         print(custom_col_labels)
-#         df=file
-#         for col in df.columns:
-#             if df[col].dtype == 'float64' or df[col].dtype == 'int64':
-#                 df[col].fillna(df[col].mean(), inplace=True)
-#             else:
-#                 df[col].fillna('Missing', inplace=True)
-#         return df.head()
-#     except Exception as e:
-#         print(f"No file {e}")
-#         return None
-
-
-
-def perform_imputation(file, strategy):
-    df=file
-    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-    categorical_cols = df.select_dtypes(exclude = ['float64', 'int64']).columns
-    
-    if strategy == 'mean':
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
-    elif strategy == 'median':
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
-    elif strategy == 'mode':
-        for col in categorical_cols:
-            mode_val = df[col].mode()[0]
-            df[col] = df[col].fillna(mode_val)
-    else:
-        raise ValueError('Invalid strategy selected')
-    print('nan for cat')
-    a = df[categorical_cols].isnull().sum().sum()
-    print(a)
-    return df.head()
-
+def perform_imputation(file):
+    try:
+        print(col_labels)
+        df=file
+        for col in df.columns:
+            if df[col].dtype == 'float64' or df[col].dtype == 'int64':
+                df[col].fillna(df[col].mean(), inplace=True)
+            else:
+                df[col].fillna('Missing', inplace=True)
+        return df.head()
+    except Exception as e:
+        print(f"No file {e}")
+        return None
     
 
 def drop_selected_columns(df, columns_to_drop):
@@ -146,7 +132,7 @@ def correct_category_dtype(df, col_labels):
     try:
         print(1)
         for col in col_labels:
-            if col_labels[col] == 'Continuous':
+            if col_labels[col] == 'continuous':
                 df[col] = pd.to_numeric(df[col], errors='coerce')
                 # median = df[col].median()
                 # df[col] = df[col].fillna(median)
