@@ -10,6 +10,7 @@ If a new change is made make sure it doesn't affect the earlier codes.
 from app import app
 from flask import render_template, request, jsonify
 from app.services.machine_learning_service import get_variables_by_type
+from app.controllers import data_processing_controller 
 
 problem_type = None 
 selected_variable = None 
@@ -30,3 +31,4 @@ def variable_selection():
     if request.method == 'POST':
         selected_variable = request.form['column']
         return render_template('machine_learning.html', selected_variable=selected_variable)
+    
