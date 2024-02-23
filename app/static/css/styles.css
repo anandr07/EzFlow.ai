@@ -36,3 +36,11 @@ p {
     max-height: 300px; /* Set max height for the container */
     overflow-y: auto; /* Add vertical scrollbar when content exceeds max height */
 }
+
+.image {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    left: 10px; /* Adjust as needed */
+    width: 200px;
+    z-index: 999; /* Ensure the image appears above other content */
+}
