@@ -7,6 +7,11 @@ If a new change is made make sure it doesn't affect the earlier codes.
 
 # Imports
 import pandas as pd
+from sklearn.ensemble import IsolationForest
+from sklearn.covariance import EllipticEnvelope
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.svm import OneClassSVM
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from flask import render_template, request, redirect, url_for
 from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling,correct_category_dtype
@@ -162,3 +167,88 @@ def confirm_drop():
 
     return redirect(url_for('index'))
 # %%
+@app.route('/remove_duplicate_rows', methods=['POST'])
+def remove_duplicate_rows():
+    global cleaned_data, raw_data
+    removing_duplicate_rows_attempted=True
+    try:
+        
+        if cleaned_data is not None:   #picking up the last modified data
+            prev_length = len(cleaned_data)
+            cleaned_data.drop_duplicates(inplace=True)
+            removed_rows = prev_length - len(cleaned_data)
+            message = f"{removed_rows} duplicate rows removed."
+            print(message)
+            print(removing_duplicate_rows_attempted)
+            return render_template('index.html', message=message, removing_duplicate_rows_attempted = removing_duplicate_rows_attempted)
+        elif raw_data is not None:      #in case, user wants to operate on original data
+            prev_length = len(raw_data)
+            raw_data.drop_duplicates(inplace=True)
+            removed_rows = prev_length - len(raw_data)
+            message = f"{removed_rows} duplicate rows removed."
+            print(message)
+            return render_template('index.html', message=message, removing_duplicate_rows_attempted = removing_duplicate_rows_attempted)
+        else:
+            message = "No data available to remove duplicates."
+            print(message)
+            return render_template('index.html', message=message, removing_duplicate_rows_attempted = removing_duplicate_rows_attempted)            
+    except Exception as e:
+        message = f"An error occurred while removing duplicate rows: {e}"
+        print(message)
+        return render_template('index.html', message=message, removing_duplicate_rows_attempted = removing_duplicate_rows_attempted)
+
+
+@app.route('/encoding_options', methods=['POST'])
+def encoding_options():
+    global cleaned_data
+    encoding_attempted = True
+    # Get the selected encoding method from the form
+    encoding_method = request.form['encoding_method']
+    if encoding_method == 'label_encoding':
+        # Perform label encoding
+        label_encoder = LabelEncoder()
+        for column in cleaned_data.select_dtypes(include=['object']).columns:
+            cleaned_data[column] = label_encoder.fit_transform(cleaned_data[column])
+        message = "Label Encoding Applied"
+        print(message)
+    elif encoding_method == 'one_hot_encoding':
+        # Perform one-hot encoding
+        cleaned_data = pd.get_dummies(cleaned_data, drop_first=True)
+        message = "One-Hot Encoding Applied"
+        print(message)
+    else:
+        # Invalid encoding method selected
+        message = "Invalid Encoding Method"
+        print(message)
+    # Render the template with the appropriate message
+    return render_template('index.html', message=message, encoding_attempted=encoding_attempted)
+
+@app.route('/outlier_removal', methods=['POST'])
+def outlier_removal():
+    global cleaned_data
+    removing_outliers_attempted = True
+    method = request.form['outlier_removal_method']
+
+    if method == 'isolation_forest':
+        outlier_removal_model = IsolationForest()
+    elif method == 'minimum_covariance_determinant':
+        outlier_removal_model = EllipticEnvelope()
+    elif method == 'local_outlier_factor':
+        outlier_removal_model = LocalOutlierFactor(novelty=False)
+    elif method == 'one_class_svm':
+        outlier_removal_model = OneClassSVM()
+
+    try:
+        outliers = outlier_removal_model.fit_predict(cleaned_data)
+        outliers_removed = cleaned_data[outliers == 1]
+
+        num_outliers = len(cleaned_data) - len(outliers_removed)
+        
+        cleaned_data.drop(cleaned_data.index[outliers != 1], inplace=True)  #modifying the dataset after outlier removal
+        message = f"{num_outliers} outliers removed using {method}."
+        print(message)       
+        return render_template('index.html', message=message, removing_outliers_attempted = removing_outliers_attempted)
+    except Exception as e:
+        error_message = f"An error occurred during outlier removal: {e}"
+        print(error_message)
+        return render_template('index.html', error_message=error_message, removing_outliers_attempted=removing_outliers_attempted)

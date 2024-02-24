@@ -149,6 +149,58 @@
             <input type="hidden" name="data" value="{{ imputed_data_df }}">
             <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
         </form>
+
+        <!-- Remove Duplicate Rows Section -->
+        <h2 class="text-left">Remove Duplicate Rows</h2>
+        <form action="{{ url_for('remove_duplicate_rows') }}" method="post">
+            <button type="submit" class="btn btn-primary">Remove Duplicate Rows</button>
+        </form> 
+        
+        {% if removing_duplicate_rows_attempted %}
+            {% if message %}
+                {{ message | safe }}
+            {% endif %}
+        {%endif%}
+
+        <h2>Encoding Options</h2>
+        <form action="{{ url_for('encoding_options') }}" method="post">
+            <label for="encoding_method">Select Encoding Method:</label>
+            <select id="encoding_method" name="encoding_method">
+                <option value="label_encoding">Label Encoding</option>
+                <option value="one_hot_encoding">One-Hot Encoding</option>
+            </select>
+        <input type="submit" value="Apply Encoding">
+        </form>
+
+        {% if encoding_attempted %}
+            {% if message %}
+                {{ message | safe }}
+            {% else %}
+                {{ error_message | safe }}
+            {% endif %}
+        {%endif%}        
+
+            <!-- Remove Outliers -->
+        <h2 class="text-left">Remove Outliers</h2>
+        <form action="{{ url_for('outlier_removal') }}" method="post">
+            <label for="outlier_removal_method">Select Outlier Removal Method:</label>
+            <select id="outlier_removal_method" name="outlier_removal_method">
+                <option value="isolation_forest">Isolation Forest</option>
+                <option value="minimum_covariance_determinant">Minimum Covariance Determinant</option>
+                <option value="local_outlier_factor">Local Outlier Factor</option>
+                <option value="one_class_svm">One-Class SVM</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Remove Outliers</button>
+        </form>
+
+        {% if removing_outliers_attempted %}
+            {% if message %}
+                {{ message | safe }}
+            {% else %}
+                {{ error_message | safe }}
+            {% endif %}
+        {%endif%}
+            
     </div>
 
     <script>
