@@ -15,7 +15,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from flask import render_template, request, redirect, url_for
 from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling,correct_category_dtype
-from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value, manual_col_labelling
+from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value, manual_col_labelling,find_id_column,process_dataframe_remove_id
 
 # Here the data is being declared globally
 cleaned_data=None
@@ -27,7 +27,7 @@ def homepage():
 
 @app.route('/')
 def index():
-    return render_template('index.html', data_head=None,data_impute=None,imputation_attempted=False)  # Pass data_head and data_impute as None initially The imputation_attempted should be False as we dont want to display any thing from the data_imputation button if its not clicked
+    return render_template('index.html', data_head=None,data_impute=None,imputation_attempted=False,atm=False)  # Pass data_head and data_impute as None initially The imputation_attempted should be False as we dont want to display any thing from the data_imputation button if its not clicked
 
 
 @app.route('/upload', methods=['POST'])
@@ -113,21 +113,39 @@ def dropping_rows_missing_values():
         return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted=dropping_rows_attempted)
 
 
-@app.route('/data_impuation', methods=['POST'])
+@app.route('/data_imputation', methods=['POST'])
 def imputation():
-    global cleaned_data #Here the data is being called from the global scope
-    imputation_attempted = True 
+    global cleaned_data  # Here the data is being called from the global scope
+    imputation_attempted = True
 
+    # Extract the imputation method from the form data
+    impute_method = request.form.get('impute_method', 'mean')  # Default to 'mean' if not specified
+    
     try:
-        imputed_data_df = perform_imputation(cleaned_data)
+        imputed_data_df = perform_imputation(cleaned_data, impute_method)
         print(f"Imputed Data: \n{imputed_data_df.head()}")
 
         # Render the result
-        return render_template('index.html', data_head=imputed_data_df.to_html(), imputation_attempted=imputation_attempted) # Here the imputed data is outputted in the webpage
+        return render_template('index.html', imputed_data_df=imputed_data_df.to_html(), imputation_attempted=imputation_attempted)
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during imputation: {e}", imputation_attempted=imputation_attempted)
     
+@app.route('/identify_id_column', methods=['POST'])
+def identify_id_column():
+    atm=True
+    global cleaned_data
+    id_column = find_id_column(cleaned_data)
+    if id_column is None:
+            return render_template('index.html', error_message='No Id Column',id_col=None,atm=True)
+    else:
+        return render_template('index.html', error_message="Id column is there",id_col=id_column.to_html(),atm=True)
+
+@app.route('/remove_id_column', methods=['POST'])
+def remove_id_column():
+    global cleaned_data
+    data = process_dataframe_remove_id(cleaned_data, drop_id=True)
+    return render_template('index.html', data_id=data.to_html())
 
 @app.route('/drop_columns', methods=['POST'])
 def drop_columns():
@@ -144,6 +162,7 @@ def drop_columns():
         return render_template('confirm_drop.html', columns_to_drop=columns_to_drop)
 
     return redirect(url_for('index'))
+
 
 @app.route('/dropped_columns', methods=['POST'])
 def confirm_drop():
