@@ -135,22 +135,62 @@
             </table>
         {% endif %}
         
-        <h2 class="text-left">Dropping Rows with Missing Values</h2>
-        <form action="{{ url_for('dropping_rows_missing_values') }}" method="post">
-            <input type="hidden" name="data" value="{{ df }}">
-            <button type="submit" class="btn btn-primary">Dropping Rows with Missing Values</button>
-        </form>
+        <h2 class="text-left">Displaying Rows with NA Values</h2>
+        <form action="{{ url_for('display_rows_na_values') }}" method="post">
+            <input type="hidden" name="data" value="{{ features_dropped }}">
+            <button type="submit" class="btn btn-primary">Display Rows</button>
+        </form>       
 
-        {% if dropping_rows_attempted %}
-            {% if features_na_values_perc %}
-                <div class="table-container">
-                    <h2>Values Dropped</h2>
-                    {{ features_na_values_perc | safe }}
-                </div>
-            {% else %}
-                <p>No rows dropped</p>
-            {% endif %}
+    {% if dropping_rows_attempted_1 %}
+        {% if rows_before %}
+            <div class="alert alert-success" role="alert">
+                percenatge of Features from which rows will be  dropped:
+            </div>
+            {{ features_dropped | safe }}
+
+            <div class="alert alert-info mt-2" role="alert">
+                Number of Rows Before Dropping:
+            </div>
+            <div>{{ rows_before | safe }}</div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                No rows were dropped based on the specified criteria.
+            </div>
+            
         {% endif %}
+    {% endif %}
+
+    
+
+
+
+
+    <h2 class="text-left">Dropping Rows with NA Values</h2>
+<form action="{{ url_for('dropping_rows_na_values') }}" method="post">
+    <!-- Assuming that the 'df' variable is the DataFrame converted to HTML before passing to the template -->
+    <input type="hidden" name="data" value="{{ data_head }}">
+    
+    <!-- Input for threshold value -->
+    <label for="threshold">Threshold for dropping rows (%):</label>
+    <input type="number" id="threshold" name="threshold" step="0.01" min="0" max="100" required>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% if dropping_rows_attempted %}
+    {% if features_dropped_1 %}
+        <div class="table-container" style="margin: 20px; padding: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-bottom: 10px; color: #007bff;">Dropped Rows Summary</h2>
+            <div style="overflow-x: auto;">
+                {{ features_dropped_1 | safe }}
+                {{data_head| safe}}
+                {{rows|safe}}
+            </div>
+        </div>
+    {% else %}
+        <p style="font-style: italic; color: #888;">No rows dropped based on the specified threshold.</p>
+    {% endif %}
+{% endif %}
 
         <h2 class="text-left">Data Imputation</h2>
         

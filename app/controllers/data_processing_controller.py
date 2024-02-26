@@ -16,7 +16,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from flask import render_template, request, redirect, url_for
 from app import app
 from app.services.data_processing_service import drop_selected_columns, process_uploaded_file, col_labelling,correct_category_dtype
-from app.services.data_processing_service import perform_imputation, dropping_rows_with_missing_value, manual_col_labelling, find_id_column,process_dataframe_remove_id
+from app.services.data_processing_service import perform_imputation, display_rows_with_na_values,dropping_rows_with_na_values, manual_col_labelling, find_id_column,process_dataframe_remove_id
 
 # Here the data is being declared globally
 cleaned_data=None
@@ -28,7 +28,9 @@ def homepage():
 
 @app.route('/')
 def index():
-    return render_template('index.html', data_head=None,data_impute=None,imputation_attempted=False)  # Pass data_head and data_impute as None initially The imputation_attempted should be False as we dont want to display any thing from the data_imputation button if its not clicked
+    
+    return render_template('index.html', data_head=None,data_impute=None,imputation_attempted=False,dropping_rows_attempted=False,dropping_rows_attempted_1=False,rows_before=None,features_dropped=None)  # Pass data_head and data_impute as None initially The imputation_attempted should be False as we dont want to display any thing from the data_imputation button if its not clicked
+  # Pass data_head and data_impute as None initially The imputation_attempted should be False as we dont want to display any thing from the data_imputation button if its not clicked
 
 
 @app.route('/upload', methods=['POST'])
@@ -97,22 +99,38 @@ def compute_custom_labels():
 
     except Exception as e:
         return render_template('index.html', error_message=f"An error occurred during custom label computation: {e}", Custom_labelling=Custom_labelling)
+    
 
 
-@app.route('/dropping_rows_with_missing_values' , methods=['POST'])
-def dropping_rows_missing_values():
-    global cleaned_data #here the data is being called for global scope
-    dropping_rows_attempted=True
+@app.route('/displaying_rows_with_na_values' , methods=['POST'])
+def display_rows_na_values():
+    global cleaned_data
     try:
-        cleaned_data, features_na_values_perc = dropping_rows_with_missing_value(cleaned_data) #df and features with na are returned
-        data_head = process_uploaded_file(cleaned_data)
-        print(data_head)
-        print(dropping_rows_attempted)
-        print(features_na_values_perc)
-        return render_template('index.html',data_head = data_head.to_html(), dropping_rows_attempted=dropping_rows_attempted, features_na_values_perc = features_na_values_perc) # Here the  data after dropping the rows is outputted in the webpage
-    except Exception as e:
-        return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted=dropping_rows_attempted)
+        dropping_rows_attempted_1=True
+        features_dropped,rows_before = display_rows_with_na_values(cleaned_data)
+        return render_template('index.html',dropping_rows_attempted_1=dropping_rows_attempted_1, features_dropped = features_dropped.to_html(),rows_before=rows_before) # Here the  data after dropping the rows is outputted in the webpage
 
+    except Exception as e:
+        return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted_1=dropping_rows_attempted_1)
+
+
+        
+@app.route('/dropping_rows_with_missing_values' , methods=['POST'])
+def dropping_rows_na_values():
+     global cleaned_data #here the data is being called for global scope
+     dropping_rows_attempted=True
+     try:
+         threshold = float(request.form['threshold'])#
+         df_cleaned, features_dropped__1,rows = dropping_rows_with_na_values(cleaned_data, threshold)
+         data_head = df_cleaned.head()
+         print('-----------',data_head)
+         
+         print('--------------------------------',rows)
+        #  return render_template('index.html',data_head = data_head.to_html(), dropping_rows_attempted=dropping_rows_attempted, features_na_values_perc = features_na_values_perc.to_html()) # Here the  data after dropping the rows is outputted in the webpage
+         return render_template('index.html',data_head = data_head.to_html(),dropping_rows_attempted=dropping_rows_attempted, features_dropped_1 = features_dropped__1,rows=rows) # Here the  data after dropping the rows is outputted in the webpage
+
+     except Exception as e:
+         return render_template('index.html', error_message=f"An error occured while dropping rows with missing values: {e}", dropping_rows_attempted=dropping_rows_attempted)
 
 #******************************************************************ADD CODES HERE ONLY***************************************************************************************** # 
 @app.route('/data_impuation', methods=['POST'])
