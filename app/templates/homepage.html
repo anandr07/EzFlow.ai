@@ -13,7 +13,7 @@
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #9acffd; /* Light blue background */
+            background-color: white; /* white background */
             color: #333; /* Dark text color */
             font-family: Arial, sans-serif; /* Font family */
             margin: 0; /* Remove default margin */
@@ -26,16 +26,23 @@
         }
 
         h1 {
-            font-size: 3em; /* Larger font size for headings */
+            font-size: 5em; /* Larger font size for headings */
             margin-bottom: 20px; /* Bottom margin for spacing */
-            color: #007bff; /* Blue heading color */
+            color: #0651a1; /* Blue heading color */
+            font-family:'Roboto';
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
         }
 
         h3 {
-            font-size: 1.5em; /* Medium font size for subheadings */
+            font-size: 1.3em; /* Medium font size for subheadings */
             font-weight: bold; /* Bold font weight */
             margin-bottom: 30px; /* Bottom margin for spacing */
             color: #555; /* Dark grey subheading color */
+            font-family:'Roboto';
+            font-weight: bold;
+            text-align: center;
         }
 
         p {
@@ -57,14 +64,30 @@
         .btn-get-started:hover {
             background-color: #0056b3; /* Darker blue on hover */
         }
+
+        /* Styling for the horizontal line */
+        hr {
+            border: 0;
+            height: 2px;
+            background: #000; /* Black color */
+            margin: 0; /* No margin to cover the full width */
+            width: 100%; /* Cover the whole page width */
+        }
+        .logo {
+            width: 300px;
+            position: absolute;
+            top: 10px; /* Adjust this value as needed to align with the text */
+            left: 30px; /* Adjust if needed */
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Ezflow.ai</h1>
+        <img src="{{ url_for('static', filename='img/ez_logo.jpg') }}" alt="EZ logo" class="logo">
+        <h1>Ezflow.ai</h1>
         <h3>Machine Learning Made Easy</h3>
+        <hr> <!-- Horizontal line -->
+        <div class="container">
         <p>Ezflow.ai is your go-to platform for effortlessly turning raw tabular data into powerful machine learning models. Our intuitive and user-friendly software empowers users with no coding experience to learn and implement machine learning projects. By automating data preprocessing, model training, and result visualization, Ezflow.ai provides predictions and comprehensive summary reports.</p>
-
         <!-- Get Started button -->
         <form action="{{ url_for('index') }}" method="get">
             <button type="submit" class="btn btn-get-started">Get Started</button>
