@@ -7,8 +7,10 @@ If a new change is made make sure it doesn't affect the earlier codes.
 
 import pandas as pd
 from flask import request
-user_labeled_col={}
-custom_col_labels={}
+import numpy as np
+
+col_labels ={}
+
 def process_uploaded_file(file):
     try:
         
@@ -19,8 +21,8 @@ def process_uploaded_file(file):
             x_rows = int(request.form['x_rows'])
 
         data_head = df.head(x_rows)
-
-        return data_head  
+    
+        return data_head
     except Exception as e:
         # Handle exceptions, log or print an error message
         print(f"Error processing file: {e}")
@@ -28,64 +30,70 @@ def process_uploaded_file(file):
 
 
 ## DONOT CHANGE THIS FILE 
-def col_labelling(data):
-    global custom_col_labels
-    custom_col_labels = {}
 
-    for col in data.columns:
-        if data[col].dtype == 'object':
-            custom_col_labels[col] = 'categorical'
+def col_labelling(cleaned_data):
+    global col_labels
+    col_labels = {}
+
+    for col in cleaned_data.columns:
+        if cleaned_data[col].dtype == 'object':
+            col_labels[col] = 'categorical'
         else:
-            unique_values_ratio = len(data) / data[col].nunique()
+            unique_values_ratio = len(cleaned_data) / cleaned_data[col].nunique()
             if unique_values_ratio > 11:
-                custom_col_labels[col] = 'categorical'
+                col_labels[col] = 'categorical'
             else:
-                custom_col_labels[col] = 'numerical'
-    return custom_col_labels
+                col_labels[col] = 'continuous'
+    return col_labels
 
-# def perform_imputation(file):
-#     try:
-#         df=file
-#         for col in df.columns:
-#             if df[col].dtype == 'float64' or df[col].dtype == 'int64':
-#                 df[col].fillna(df[col].mean(), inplace=True)
-#             else:
-#                 df[col].fillna('Missing', inplace=True)
-#         return df.head()
-#     except Exception as e:
-#         print(f"No file {e}")
-#         return None
-    
+def manual_col_labelling(col_names, form):
+    global col_labels
+    for column in col_names:
+        col_labels[column] = form.get(column)
+    return col_labels
 
-def drop_selected_columns(file, columns_to_drop):
-    print(columns_to_drop)
-    try:
-        df= file
-        df.drop(columns_to_drop, axis=1, inplace=True)
-        return df
-    except Exception as e:
-        print(f"No File: {e}")
-        return None
-#%%
-    
-def perform_imputation(file, fill_method='mean'):
-    global user_labeled_col, custom_col_labels
+def dropping_rows_with_missing_value(file):
     try:
         df = file
-        # Determine which label dictionary to use based on whether user_labeled_col is empty
-        if not user_labeled_col:  # Check if user_labeled_col is empty ## This Runs when user_labeled_col are empty
-            # If user_labeled_col is empty, use custom_col_labels for all columns
-            label_source = custom_col_labels
-        else:
-            # If user_labeled_col is not empty, prefer user labels but fall back to custom labels if necessary
-            label_source = {**custom_col_labels, **user_labeled_col}  # Merge, with user_labeled_col taking precedence
+        print("Columns with missing values:", [column for column in df.columns if df[column].isnull().any()])
 
+    # Identify features with more than 60% missing values
+        features_with_na = {}
+        # print("col:",df.columns)
+        for feature_names in df.columns:
+            if df[feature_names].isnull().sum() > 0:
+                missing_percentage = np.round(df[feature_names].isnull().mean() * 100, 4)
+                features_with_na[feature_names] = missing_percentage
+        print(features_with_na)
+        # Print feature names and their respective percentage of missing values
+        #print("sadas",len(features_with_na))
+        for feature, missing_percentage in features_with_na.items():
+            print(f"{feature}: {missing_percentage}% missing values")
+
+            print(feature)
+        # Drop rows with missing values in columns having more than 80% missing values
+            df.dropna(subset=feature, inplace=True)
+        # returning the DataFrame after dropping rows
+        print(df)
+        return df,features_with_na
+        
+    except Exception as e:
+        print(f"No file {e}")
+        return None
+
+
+def perform_imputation(file, fill_method='mean'):
+    global col_labels
+    try:
+        df = file
+
+        label_source = col_labels
         for col in df.columns:
             # Determine column type using the chosen label source
             col_type = label_source.get(col, None)
             
             # Apply imputation based on the determined column type and specified fill_method
-            if col_type == 'numerical':
+            if col_type == 'continuous':
                 # If column type is object, try converting to float
                 if df[col].dtype == 'object':
                     try:
@@ -123,10 +131,7 @@ def perform_imputation(file, fill_method='mean'):
     except Exception as e:
         print(f"Error during imputation: {e}")
         return None
-
-
-
-# Function to find ID column
+ # Function to find ID column
 def find_id_column(df):
     for col in df.columns:
         if df[col].is_unique and 'id' in col.lower():
@@ -136,7 +141,7 @@ def find_id_column(df):
 # Function to process DataFrame and optionally remove ID column
 def process_dataframe_remove_id(df, drop_id=False):
     id_column = find_id_column(df)
-    if id_column==None:
+    if id_column is None:
         print("No Id columns found")
         return df.head()
     id_column1=id_column.columns[0]
@@ -148,3 +153,32 @@ def process_dataframe_remove_id(df, drop_id=False):
     else:
         print("No ID column found.")
     return df.head()
+   
+
+def drop_selected_columns(df, columns_to_drop):
+    print(columns_to_drop)
+    try:
+        df.drop(columns_to_drop, axis=1, inplace=True)
+        return df
+    except Exception as e:
+        print(f"Error Occured: {e}")
+        return None
+
+def correct_category_dtype(df, col_labels):
+    try:
+        print(1)
+        for col in col_labels:
+            if col_labels[col] == 'continuous':
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+                # median = df[col].median()
+                # df[col] = df[col].fillna(median)
+            else:
+                pass
+                # mode = df[col].mode()[0]
+                # df[col] = df[col].fillna(mode)
+        print(1)
+        print('Corrected Data Types: \n', df.dtypes)
+        return df
+    except Exception as e:
+        print(f"Error Occured: {e}")
+        return None

@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Light blue background */
+    color: #333; /* Dark text color */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 20px;
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1, h3 {
+    color: #007bff; /* Blue headings */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.btn-primary, .btn-info, .btn-danger {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.table-container {
+    margin-top: 30px;
+    max-height: 300px; /* Set max height for the container */
+    overflow-y: auto; /* Add vertical scrollbar when content exceeds max height */
+}

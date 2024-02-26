@@ -3,118 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Upload</title>
+    <title>Ezflow.ai</title>
+    <!-- Bootstrap CSS library -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
-    <h1>CSV Upload</h1>
-    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".csv" required>
-        <label for="x_rows">Display x rows:</label>
-        <input type="number" name="x_rows" value="5">
-        <input type="submit" value="Upload and Display">
-    </form>
-    
-    {% if data_head %}
-        {% if data_head is string %}
-            <p>{{ data_head | safe }}</p>
-        {% else %}
-            {% if not data_head.empty %}
-                <h2>Head of the Dataset</h2>
-                {{ data_head.to_html() | safe }}
+<body style="background-color:  #9acffd;"> <!-- Light blue background -->
+    <div class="container">
+        <h1>Ezflow.ai</h1>
+        <p>Machine Learning Made Easy</p>
+
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <label for="x_rows">Display x rows:</label>
+            <input type="number" name="x_rows" value="5">
+            <input type="submit" value="Upload and Display" class="btn btn-primary">
+        </form>
+
+        {% if data_head %}
+            {% if data_head is string %}
+                <p>{{ data_head | safe }}</p>
             {% else %}
-                <p>No data available.</p>
+                {% if not data_head.empty %}
+                    <div class="table-container">
+                        <h2>Head of the Dataset</h2>
+                        <div class="table-scroll">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        {% for column in data_head.columns %}
+                                            <th>{{ column }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for index, row in data_head.iterrows() %}
+                                        {% if index < 5 %}
+                                            <tr>
+                                                {% for value in row %}
+                                                    <td>{{ value }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if data_head.shape[0] > 5 %}
+                            <button onclick="scrollTable()" class="btn btn-secondary mt-3">Show More</button>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p>No data available.</p>
+                {% endif %}
             {% endif %}
         {% endif %}
-    {% endif %}
-
-    <div class='table table-sm' style="width: 100%;">
-        <!-- Dropdown for selecting columns to drop -->
+        
+        {% if imputation_attempted %}
+            {% if imputed_data_df %}
+                <h2>Head of the Dataset</h2>
+                {{ imputed_data_df | safe }}
+            {% else %}
+                <p>No data available or imputation not yet performed.</p>
+            {% endif %}
+        {% endif %}
         <form action="{{ url_for('drop_columns') }}" method="post">
             <label for="drop_columns">Do you want to drop columns?</label>
-            <select id="drop_columns" name="drop_columns" onchange="toggleDropdown()">
+            <select id="drop_columns" name="drop_columns" onchange="toggleDropdown()" class="form-control">
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
             </select>
-
-            <!-- Dropdown for selecting columns to drop -->
             <div id="columnDropdown" style="display: none;">
                 <label for="columns_to_drop">Which columns do you want to drop?</label>
-                <select id="columns_to_drop" name="columns_to_drop" multiple>
+                <select id="columns_to_drop" name="columns_to_drop" multiple class="form-control">
                     {% for item in col_name %}
                         <option value="{{item}}">{{item}}</option>
                     {% endfor %}
                 </select>
-                <button type="submit" name="confirm_drop" value="Yes" class="btn btn-danger">Drop Columns</button>
+                <button type="submit" name="confirm_drop" value="Yes" class="btn btn-danger mt-2">Drop Columns</button>
             </div>
         </form>
-    </div>
 
-    <h1>Compute Custom Labels</h1>
-    <form action="{{ url_for('compute_custom_labels') }}" method="post">
-        <button type="submit" class="btn btn-info">Compute Custom Labels</button>
-    </form>
+        
 
-    <style>
-        .colorful-heading {
-            background-color: #0c2a4a; /* Dark blue */
-            color: white;
-            padding: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-    
-        .form-inline {
-            border: 2px solid #0c2a4a; /* Dark blue border to match the heading */
-            padding: 15px;
-            margin-bottom: 20px; /* Space before the form starts */
-            border-radius: 5px; /* Optional: rounds the corners */
-            display: flex; /* Aligns items in a row */
-            justify-content: center; /* Centers items horizontally */
-            gap: 10px; /* Adds space between inline items */
-        }
-    
-        .blue-dropdown, .btn-primary {
-            background-color: rgba(0, 123, 255, 0.6);
-            color: white;
-            border: 1px solid rgba(0, 123, 255, 0.6);
-            border-radius: 0.25rem;
-            padding: 0.2rem 0.5rem;
-            font-size: 0.9rem;
-        }
-    
-        .blue-dropdown:hover {
-            background-color: #28a745; /* Green on hover */
-            border-color: #28a745;
-        }
-    
-        .blue-dropdown:focus {
-            background-color: #1c7430; /* Dark green when focused */
-            border-color: #1c7430;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-        }
-    
-        .blue-dropdown option {
-            background-color: white;
-            color: #007bff;
-        }
-    
-        .btn-primary {
-            border-color: transparent; /* Removes default border color */
-        }
-    
-        .btn-primary:hover {
-            background-color: #ff0000; /* Red on hover */
-            border-color: #ff0000; /* Ensures border color matches background */
-        }
-    </style>
-    
-    <div class="colorful-heading">
-        <h1>Data Imputation</h1>
-    </div>
-    
-    <div class="form-inline"> <!-- Wrap elements in a div with class for inline display -->
+        <h2 class="text-left">Column Type Selection</h2>
+        <form action="{{ url_for('column_type_selection') }}" method="post">
+            <button type="submit" class="btn btn-primary">Manual</button>
+        </form>
+
+        <!-- <p>Inside the method.</p> -->
+        <form action="{{ url_for('column_type_selection') }}" method="post">
+            <!-- <p>After form.</p> -->
+            {% if col_names %}
+                <ul>
+                    {% for column in col_names %}
+                        <li>
+                            <label>{{ column }}:</label>
+                            <input type="radio" id="{{ column }}_continuous" name="{{ column }}" value="continuous" checked> Continuous
+                            <input type="radio" id="{{ column }}_categorical" name="{{ column }}" value="categorical"> Categorical
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit" class="btn btn-primary">Submit Column Types</button>
+                <form action ="{{ url_for('imputation') }}" method="post"></form>
+            {% else %}
+                <!-- <p>No column names available.</p> -->
+            {% endif %}
+        </form>
+
+        <form action="{{ url_for('compute_custom_labels') }}" method="post">
+            <button type="submit" class="btn btn-info">Compute Custom Labels</button>
+        </form>
+
+        {% if Custom_labelling %}
+            <h2>Custom Labels</h2>
+            <table border="1" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Column Name</th>
+                        <th>Custom Label</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for col, label in custom_labels.items() %}
+                        <tr>
+                            <td>{{ col }}</td>
+                            <td>{{ label }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <h2 class="text-left">Dropping Rows with Missing Values</h2>
+        <form action="{{ url_for('dropping_rows_missing_values') }}" method="post">
+            <input type="hidden" name="data" value="{{ df }}">
+            <button type="submit" class="btn btn-primary">Dropping Rows with Missing Values</button>
+        </form>
+
+        {% if dropping_rows_attempted %}
+            {% if features_na_values_perc %}
+                <div class="table-container">
+                    <h2>Values Dropped</h2>
+                    {{ features_na_values_perc | safe }}
+                </div>
+            {% else %}
+                <p>No rows dropped</p>
+            {% endif %}
+        {% endif %}
+
+        <h2 class="text-left">Data Imputation</h2>
+        
         <label for="impute_method">Choose imputation method:</label>
         <select name="impute_method" id="impute_method" class="blue-dropdown">
             <option value="mean">Mean</option>
@@ -126,69 +165,104 @@
         <form action="{{ url_for('imputation') }}" method="post">
             <input type="hidden" name="data" value="{{ imputed_data_df }}">
             <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
+        </form>    
+    
+    
+
+        <h2 class="text-left">Data frame ID column information</h2>
+
+            <!-- Button to identify ID column -->
+        <form action="/identify_id_column" method="post" style="display: inline-block;">
+                <button type="submit" class="btn btn-primary">Identify ID Column</button>
         </form>
-    </div>
-    
-    
-    
-    
-    {% if imputation_attempted %}
-        {% if data_impute %}
-            <h2>Head of the Dataset</h2>
-            {{ data_impute | safe }}
-        {% else %}
-            <p>No data available or imputation not yet performed.</p>
-        {% endif %}
-    {% endif %}
-
-    {% if Custom_labelling %}
-        <h2>Custom Labels</h2>
-        <table border="1">
-            <tr>
-                <th>Column Name</th>
-                <th>Custom Label</th>
-            </tr>
-            {% for col, label in custom_labels.items() %}
-                <tr>
-                    <td>{{ col }}</td>
-                    <td>{{ label }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-        {% else %}
-            <p>No custom labels available.</p>
-    {% endif %}
-
-    <div class="colorful-heading">
-    <h2>Dataframe ID Column Operations</h2>
-    </div>  
-    <div class="form-inline">  
-    <!-- Button to identify ID column -->
-    <form action="/identify_id_column" method="post">
-        <button type="submit" class="btn btn-primary">Identify ID Column</button>
-    </form>
-    <form action="/remove_id_column" method="post">
-        <button type="submit" class="btn btn-primary">Remove ID Column</button>
-    </form>
-    </div>  
-    <div id="data-area">
+        <form action="/remove_id_column" method="post" style="display: inline-block;">
+                <button type="submit" class="btn btn-primary">Remove ID Column</button>
+        </form>
+  
         {% if atm %}
             {% if id_col %}
                 {{ id_col|safe }}
             {% else %}
-            <p> No Id column </p>
+                <p> No Id column </p>
             {% endif %}
         {% endif %}
-        
-        
-    </div>
-    <!-- Button to remove ID column -->
-
-    <!-- Placeholder for displaying DataFrame or messages -->
-    <div id="data-area">
         {% if data_id %}
             {{ data_id|safe }}
         {% endif %}
+        <!-- Remove Duplicate Rows Section -->
+        <h2 class="text-left">Remove Duplicate Rows</h2>
+        <form action="{{ url_for('remove_duplicate_rows') }}" method="post">
+            <button type="submit" class="btn btn-primary">Remove Duplicate Rows</button>
+        </form> 
+        
+        {% if removing_duplicate_rows_attempted %}
+            {% if message %}
+                {{ message | safe }}
+            {% endif %}
+        {%endif%}
+
+        <h2>Encoding Options</h2>
+        <form action="{{ url_for('encoding_options') }}" method="post">
+            <label for="encoding_method">Select Encoding Method:</label>
+            <select id="encoding_method" name="encoding_method">
+                <option value="label_encoding">Label Encoding</option>
+                <option value="one_hot_encoding">One-Hot Encoding</option>
+            </select>
+        <input type="submit" value="Apply Encoding">
+        </form>
+
+        {% if encoding_attempted %}
+            {% if message %}
+                {{ message | safe }}
+            {% else %}
+                {{ error_message | safe }}
+            {% endif %}
+        {%endif%}        
+
+            <!-- Remove Outliers -->
+        <h2 class="text-left">Remove Outliers</h2>
+        <form action="{{ url_for('outlier_removal') }}" method="post">
+            <label for="outlier_removal_method">Select Outlier Removal Method:</label>
+            <select id="outlier_removal_method" name="outlier_removal_method">
+                <option value="isolation_forest">Isolation Forest</option>
+                <option value="minimum_covariance_determinant">Minimum Covariance Determinant</option>
+                <option value="local_outlier_factor">Local Outlier Factor</option>
+                <option value="one_class_svm">One-Class SVM</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Remove Outliers</button>
+        </form>
+
+        {% if removing_outliers_attempted %}
+            {% if message %}
+                {{ message | safe }}
+            {% else %}
+                {{ error_message | safe }}
+            {% endif %}
+        {%endif%}
+            
     </div>
+
+    <script>
+        function toggleDropdown() {
+            var dropColumnsValue = document.getElementById("drop_columns").value;
+            var columnDropdown = document.getElementById("columnDropdown");
+
+            if (dropColumnsValue == "yes") {
+                columnDropdown.style.display = "block";
+            } else {
+                columnDropdown.style.display = "none";
+            }
+        }
+
+        function scrollTable() {
+            var tableScroll = document.querySelector('.table-scroll');
+            tableScroll.scrollTop += 50; // Adjust scroll amount as needed
+        }
+    </script>
+
+    <div class="text-center">
+        <a href="{{ url_for('data_visualization') }}" class="btn btn-primary">Proceed to Data Visualization</a>
+    </div>
+
 </body>
 </html>

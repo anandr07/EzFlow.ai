@@ -1,0 +1,141 @@
+<!-- machine_learning.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Modelling</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        h1 {
+            font-size: 2em; 
+        }
+        h1#data-modelling {
+            font-size: 1.5em; 
+        }
+        .histogram-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body style="background-color: #f0f8ff;"> <!-- Light blue background -->
+    <div class="container">
+        <h1>Ezflow.ai</h1>
+        <p>Machine Learning Made Easy</p>
+        
+        <h1 id="data-modelling">Data Modelling</h1>
+        <form action="/machine-learning" method="post">
+            <label for="problem_type">Select Problem Type:</label>
+            <select id="problem_type" name="problem_type">
+                <option value="Regression">Regression</option>
+                <option value="Classification">Classification</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <!-- Display numerical or categorical variables based on problem type -->
+        {% if problem_type %}
+            <h2>Selected problem type: {{ problem_type }}</h2>
+            <h3>Available Variables:</h3>
+            <form action="/variable-selection" method="post">
+                {% for variable in variables %}
+                    <input type="radio" id="{{ variable }}" name="column" value="{{ variable }}">
+                    <label for="{{ variable }}">{{ variable }}</label><br>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        {% endif %}
+        <!-- Display selected variable after form submission -->
+        {% if selected_variable %}
+            <h3>Selected Variable:</h3>
+            <p>{{ selected_variable }}</p>
+            <!-- <p>{{ problem_type }}</p> -->
+            {% if problem_type == "regression" %}
+            <form action="/regression-model-selection" method="post">
+                <label for="regression_model">Select Regression Model:</label>
+                <select id="regression_model" name="regression_model">
+                    <option value="LinearRegression">Linear Regression</option>
+                    <option value="SVR">Support-Vector Regression</option>
+                    <option value="KNN">K-Nearest Neighbors Regression</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            {% endif %}        
+        {% endif %}
+        {% if linear_regression_attempted %}
+            <div class="container">
+                <h1>Regression Model Evaluation</h1>
+                <h2>Selected Variable: {{ selected_variable }}</h2>
+                <h2>Selected Model: {{ regression_model }}</h2>
+                <!-- Display evaluation metrics in a table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for metric, value in model_output.items() %}
+                        <tr>
+                            <td>{{ metric }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+        {% if SVR_attempted %}
+            <div class="container">
+                <h1>Regression Model Evaluation</h1>
+                <h2>Selected Variable: {{ selected_variable }}</h2>
+                <h2>Selected Model: {{ regression_model }}</h2>
+                <!-- Display evaluation metrics in a table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for metric, value in model_output.items() %}
+                        <tr>
+                            <td>{{ metric }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}        
+        {% if KNN_attempted %}
+            <div class="container">
+                <h1>Regression Model Evaluation</h1>
+                <h2>Selected Variable: {{ selected_variable }}</h2>
+                <h2>Selected Model: {{ regression_model }}</h2>
+                <!-- Display evaluation metrics in a table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for metric, value in model_output.items() %}
+                        <tr>
+                            <td>{{ metric }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %} 
+
+    </div>
+</body>
+</html>

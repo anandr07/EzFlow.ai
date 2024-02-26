@@ -1,0 +1,74 @@
+<!-- homepage.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ezflow.ai - Machine Learning Made Easy</title>
+
+    <!-- Bootstrap CSS library -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #9acffd; /* Light blue background */
+            color: #333; /* Dark text color */
+            font-family: Arial, sans-serif; /* Font family */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+
+        .container {
+            padding: 50px 20px; /* Padding for content */
+            text-align: center; /* Center align text */
+        }
+
+        h1 {
+            font-size: 3em; /* Larger font size for headings */
+            margin-bottom: 20px; /* Bottom margin for spacing */
+            color: #007bff; /* Blue heading color */
+        }
+
+        h3 {
+            font-size: 1.5em; /* Medium font size for subheadings */
+            font-weight: bold; /* Bold font weight */
+            margin-bottom: 30px; /* Bottom margin for spacing */
+            color: #555; /* Dark grey subheading color */
+        }
+
+        p {
+            font-size: 1.1em; /* Medium font size for paragraphs */
+            line-height: 1.6; /* Line height for readability */
+            margin-bottom: 30px; /* Bottom margin for spacing */
+        }
+
+        .btn-get-started {
+            background-color: #007bff; /* Blue button background color */
+            border: none; /* Remove button border */
+            border-radius: 25px; /* Round button corners */
+            padding: 15px 30px; /* Padding for button */
+            font-size: 1.2em; /* Medium font size for button */
+            color: #fff; /* White text color */
+            transition: background-color 0.3s ease; /* Smooth transition on hover */
+        }
+
+        .btn-get-started:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Ezflow.ai</h1>
+        <h3>Machine Learning Made Easy</h3>
+        <p>Ezflow.ai is your go-to platform for effortlessly turning raw tabular data into powerful machine learning models. Our intuitive and user-friendly software empowers users with no coding experience to learn and implement machine learning projects. By automating data preprocessing, model training, and result visualization, Ezflow.ai provides predictions and comprehensive summary reports.</p>
+
+        <!-- Get Started button -->
+        <form action="{{ url_for('index') }}" method="get">
+            <button type="submit" class="btn btn-get-started">Get Started</button>
+        </form>
+    </div>
+</body>
+</html>
