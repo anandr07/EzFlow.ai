@@ -58,7 +58,15 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-
+        
+        {% if imputation_attempted %}
+            {% if imputed_data_df %}
+                <h2>Head of the Dataset</h2>
+                {{ imputed_data_df | safe }}
+            {% else %}
+                <p>No data available or imputation not yet performed.</p>
+            {% endif %}
+        {% endif %}
         <form action="{{ url_for('drop_columns') }}" method="post">
             <label for="drop_columns">Do you want to drop columns?</label>
             <select id="drop_columns" name="drop_columns" onchange="toggleDropdown()" class="form-control">
@@ -127,29 +135,100 @@
             </table>
         {% endif %}
         
-        <h2 class="text-left">Dropping Rows with Missing Values</h2>
-        <form action="{{ url_for('dropping_rows_missing_values') }}" method="post">
-            <input type="hidden" name="data" value="{{ df }}">
-            <button type="submit" class="btn btn-primary">Dropping Rows with Missing Values</button>
-        </form>
+        <h2 class="text-left">Displaying Rows with NA Values</h2>
+        <form action="{{ url_for('display_rows_na_values') }}" method="post">
+            <input type="hidden" name="data" value="{{ features_dropped }}">
+            <button type="submit" class="btn btn-primary">Display Rows</button>
+        </form>       
 
-        {% if dropping_rows_attempted %}
-            {% if features_na_values_perc %}
-                <div class="table-container">
-                    <h2>Values Dropped</h2>
-                    {{ features_na_values_perc | safe }}
-                </div>
-            {% else %}
-                <p>No rows dropped</p>
-            {% endif %}
+    {% if dropping_rows_attempted_1 %}
+        {% if rows_before %}
+            <div class="alert alert-success" role="alert">
+                percenatge of Features from which rows will be  dropped:
+            </div>
+            {{ features_dropped | safe }}
+
+            <div class="alert alert-info mt-2" role="alert">
+                Number of Rows Before Dropping:
+            </div>
+            <div>{{ rows_before | safe }}</div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                No rows were dropped based on the specified criteria.
+            </div>
+            
         {% endif %}
+    {% endif %}
+
+    
+
+
+
+
+    <h2 class="text-left">Dropping Rows with NA Values</h2>
+<form action="{{ url_for('dropping_rows_na_values') }}" method="post">
+    <!-- Assuming that the 'df' variable is the DataFrame converted to HTML before passing to the template -->
+    <input type="hidden" name="data" value="{{ data_head }}">
+    
+    <!-- Input for threshold value -->
+    <label for="threshold">Threshold for dropping rows (%):</label>
+    <input type="number" id="threshold" name="threshold" step="0.01" min="0" max="100" required>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% if dropping_rows_attempted %}
+    {% if features_dropped_1 %}
+        <div class="table-container" style="margin: 20px; padding: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-bottom: 10px; color: #007bff;">Dropped Rows Summary</h2>
+            <div style="overflow-x: auto;">
+                {{ features_dropped_1 | safe }}
+                {{data_head| safe}}
+                {{rows|safe}}
+            </div>
+        </div>
+    {% else %}
+        <p style="font-style: italic; color: #888;">No rows dropped based on the specified threshold.</p>
+    {% endif %}
+{% endif %}
 
         <h2 class="text-left">Data Imputation</h2>
+        
+        <label for="impute_method">Choose imputation method:</label>
+        <select name="impute_method" id="impute_method" class="blue-dropdown">
+            <option value="mean">Mean</option>
+            <option value="median">Median</option>
+            <option value="mode">Mode</option>
+            <option value="foward_fill">Forward Fill</option>
+            <option value="backward_fill">Backward Fill</option>
+        </select>
         <form action="{{ url_for('imputation') }}" method="post">
             <input type="hidden" name="data" value="{{ imputed_data_df }}">
             <button type="submit" class="btn btn-primary">Perform Data Imputation</button>
-        </form>
+        </form>    
+    
+    
 
+        <h2 class="text-left">Data frame ID column information</h2>
+
+            <!-- Button to identify ID column -->
+        <form action="/identify_id_column" method="post" style="display: inline-block;">
+                <button type="submit" class="btn btn-primary">Identify ID Column</button>
+        </form>
+        <form action="/remove_id_column" method="post" style="display: inline-block;">
+                <button type="submit" class="btn btn-primary">Remove ID Column</button>
+        </form>
+  
+        {% if atm %}
+            {% if id_col %}
+                {{ id_col|safe }}
+            {% else %}
+                <p> No Id column </p>
+            {% endif %}
+        {% endif %}
+        {% if data_id %}
+            {{ data_id|safe }}
+        {% endif %}
         <!-- Remove Duplicate Rows Section -->
         <h2 class="text-left">Remove Duplicate Rows</h2>
         <form action="{{ url_for('remove_duplicate_rows') }}" method="post">
