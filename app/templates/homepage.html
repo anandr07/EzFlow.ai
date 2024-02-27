@@ -13,9 +13,9 @@
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #9acffd; /* Light blue background */
+            background-color: white; /* white background */
             color: #333; /* Dark text color */
-            font-family: Arial, sans-serif; /* Font family */
+            font-family: 'Trebuchet MS', Arial, sans-serif;
             margin: 0; /* Remove default margin */
             padding: 0; /* Remove default padding */
         }
@@ -24,28 +24,84 @@
             padding: 50px 20px; /* Padding for content */
             text-align: center; /* Center align text */
         }
-
+        @font-face {
+            font-family: 'Optima';
+            src: url('path-to-your-font-files/optima.woff2') format('woff2'),
+            url('path-to-your-font-files/optima.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @keyframes blink {
+            50% {
+            opacity: 0;
+                }
+            }
+        .blink {
+            animation: blink 1s step-start infinite;
+            }
+        .different-color {
+        color: #5DADE2  ; 
+        }
         h1 {
-            font-size: 3em; /* Larger font size for headings */
-            margin-bottom: 20px; /* Bottom margin for spacing */
-            color: #007bff; /* Blue heading color */
+            font-size: 8.5em; /* Larger font size for headings */
+            margin-bottom: 0px; /* Bottom margin for spacing */
+            color: #0651a1; /* Blue heading color */
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
         }
 
         h3 {
-            font-size: 1.5em; /* Medium font size for subheadings */
+            font-size: 1.9em; /* Medium font size for subheadings */
             font-weight: bold; /* Bold font weight */
             margin-bottom: 30px; /* Bottom margin for spacing */
-            color: #555; /* Dark grey subheading color */
+            color: black; /* Dark grey subheading color */
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+            font-weight: bold;
+            text-align: center;
         }
 
         p {
-            font-size: 1.1em; /* Medium font size for paragraphs */
+            font-size: 2.6em; /* Medium font size for paragraphs */
+            margin-top: 9px;
             line-height: 1.6; /* Line height for readability */
             margin-bottom: 30px; /* Bottom margin for spacing */
+            text-align: justify;
         }
+        .quote-container {
+    position: relative;
+    padding: 10px; 
+    display: inline-block; 
+    font-size: 1.3em; /* Adjusted font size for readability */
+    line-height: 1.6;
+    margin: 25px auto; /* Center the quote container and add margin for spacing */
+    text-align: justify;
+    max-width: 90%; /* Maximum width of the quote container */
+    border-left: 9px solid #5DADE2; 
+    /* border-right: 2px solid #5DADE2;  */
+}
 
+.quote-container:before
+{
+    content: "";
+    position: absolute;
+    height: 100%; /* Make the lines the full height of the container */
+    width: 5px; /* Line thickness */
+    /* background: #5DADE2;  */
+}
+
+.quote-container:before {
+    left: 0;
+    top: 0;
+}
+
+/* .quote-container:after {
+    right: 0;
+    top: 0;
+} */
         .btn-get-started {
-            background-color: #007bff; /* Blue button background color */
+            background-color: #5DADE2; /* Blue button background color */
             border: none; /* Remove button border */
             border-radius: 25px; /* Round button corners */
             padding: 15px 30px; /* Padding for button */
@@ -55,16 +111,45 @@
         }
 
         .btn-get-started:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+            background-color: #0651a1; /* Darker blue on hover */
+            color: #fff;
+            /* font-family: 'Optima', sans-serif; */
+            font-weight: bold;
+            text-align: center;
         }
+
+        /* Styling for the horizontal line */
+        hr {
+            border: 0;
+            height: 2px;
+            background: #000; /* Black color */
+            margin: 0; /* No margin to cover the full width */
+            width: 100%; /* Cover the whole page width */
+        }
+        .logo {
+            width: 300px;
+            position: absolute;
+            top: 15px; /* Adjust this value as needed to align with the text */
+            left: 30px; /* Adjust if needed */
+        }
+        .dot {
+            font-family: 'Trebuchet MS', Arial, sans-serif; /* Use 'Optima' if it is available on the system */
+    font-weight: bold; /* Adjust as needed */
+    color: black; /* Set the dot color to black */
+}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Ezflow.ai</h1>
+        <img src="{{ url_for('static', filename='img/ez_logo.jpg') }}" alt="EZ logo" class="logo">
+        <h1>Ezflow<span class="dot blink">.</span><span class="different-color">ai</span></h1>
         <h3>Machine Learning Made Easy</h3>
-        <p>Ezflow.ai is your go-to platform for effortlessly turning raw tabular data into powerful machine learning models. Our intuitive and user-friendly software empowers users with no coding experience to learn and implement machine learning projects. By automating data preprocessing, model training, and result visualization, Ezflow.ai provides predictions and comprehensive summary reports.</p>
-
+        <hr> <!-- Horizontal line -->
+        <hr> <!-- Horizontal line -->
+        <div class="container">
+        <div class="quote-container">
+            <strong>Ezflow.ai</strong> is your go-to platform for effortlessly turning raw tabular data into powerful machine learning models. Our intuitive and user-friendly platform empowers users with no coding experience to learn and implement machine learning projects. By automating data preprocessing, model training, and result visualization, Ezflow.ai provides predictions and comprehensive summary reports.
+        </div>
+        <!-- <p>Ezflow.ai is your go-to platform for effortlessly turning raw tabular data into powerful machine learning models. Our intuitive and user-friendly platform empowers users with no coding experience to learn and implement machine learning projects. By automating data preprocessing, model training, and result visualization, Ezflow.ai provides predictions and comprehensive summary reports.</p> -->
         <!-- Get Started button -->
         <form action="{{ url_for('index') }}" method="get">
             <button type="submit" class="btn btn-get-started">Get Started</button>
