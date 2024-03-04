@@ -26,13 +26,14 @@ p {
     text-align: center;
 }
 
-.btn-primary, .btn-info, .btn-danger {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
 .table-container {
     margin-top: 30px;
     max-height: 300px; /* Set max height for the container */
     overflow-y: auto; /* Add vertical scrollbar when content exceeds max height */
+}
+
+.custom-line {
+    border: 0.75px solid rgb(127, 127, 127);
+    margin-top: 20px; 
+    margin-bottom: 20px; 
 }
